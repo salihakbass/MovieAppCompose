@@ -1,0 +1,3 @@
+package com.salihakbas.movieappcompose.domain.repository
+
+interface MainRepository
