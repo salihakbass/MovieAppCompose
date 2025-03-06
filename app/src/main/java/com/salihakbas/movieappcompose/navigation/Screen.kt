@@ -44,4 +44,8 @@ sealed interface Screen {
 
     @Serializable
     data object Payment : Screen
+
+    companion object {
+        fun getRoute(screen: Screen): String = screen::class.qualifiedName.orEmpty()
+    }
 }
