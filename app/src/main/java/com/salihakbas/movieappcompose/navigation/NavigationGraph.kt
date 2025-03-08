@@ -69,7 +69,8 @@ fun NavigationGraph(
             SplashScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navController = navController
             )
         }
         composable<Onboarding> {
