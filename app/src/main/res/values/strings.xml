@@ -3,4 +3,21 @@
     <string name="movie_text_splash">Movie</string>
     <string name="streaming_text_splash">Streaming</string>
     <string name="loading_text_splash">Loading</string>
+    <string name="email_address_text">Email Address</string>
+    <string name="password_text">Password</string>
+    <string name="sign_in_text">Sign In</string>
+    <string name="or_text">Or</string>
+    <string name="you_dont_have_an_account_text">You don\'t have an account?</string>
+    <string name="sign_up_text">Sign Up</string>
+    <string name="enjoy_our_premium_features_text">Enjoy Our Premium Features</string>
+    <string name="premium_features_title_1">"Unlimited Library: "</string>
+    <string name="premium_features_title_2">"Personalized Recommendations: "</string>
+    <string name="premium_features_title_3">"Watch Offline: "</string>
+    <string name="premium_features_title_4">"HD Quality: "</string>
+    <string name="premium_features_title_5">"Multilingual Subtitles: "</string>
+    <string name="premium_features_text_1">Thousands of movies and TV shows from various genres, all in one place.</string>
+    <string name="premium_features_text_2">Discover movies and series that match your taste.</string>
+    <string name="premium_features_text_3">Download your favorite films and watch without an internet connection.</string>
+    <string name="premium_features_text_4">Enjoy the best viewing experience with high-definition quality.</string>
+    <string name="premium_features_text_5">Support for multiple languages for your viewing comfort.</string>
 </resources>
