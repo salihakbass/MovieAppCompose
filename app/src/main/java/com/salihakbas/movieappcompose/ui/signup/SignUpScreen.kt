@@ -1,16 +1,36 @@
 package com.salihakbas.movieappcompose.ui.signup
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.salihakbas.movieappcompose.R
 import com.salihakbas.movieappcompose.ui.components.EmptyScreen
 import com.salihakbas.movieappcompose.ui.components.LoadingBar
+import com.salihakbas.movieappcompose.ui.signin.SignInIcon
 import com.salihakbas.movieappcompose.ui.signup.SignUpContract.UiAction
 import com.salihakbas.movieappcompose.ui.signup.SignUpContract.UiEffect
 import com.salihakbas.movieappcompose.ui.signup.SignUpContract.UiState
@@ -32,14 +52,144 @@ fun SignUpScreen(
 
 @Composable
 fun SignUpContent() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = colorResource(R.color.main_blue_bg))
+            .padding(top = 48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
-            text = "SignUp Content",
+            text = "Sign Up",
             fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
         )
+        OutlinedTextField(
+            value = "",
+            onValueChange = { },
+            label = {
+                Text(
+                    text = "Full Name",
+                    color = Color.Gray
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            shape = RoundedCornerShape(12.dp),
+            textStyle = TextStyle(color = Color.White)
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = { },
+            label = {
+                Text(
+                    text = "Email Address",
+                    color = Color.Gray
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            shape = RoundedCornerShape(12.dp),
+            textStyle = TextStyle(color = Color.White)
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = { },
+            label = {
+                Text(
+                    text = "Phone Number",
+                    color = Color.Gray
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            shape = RoundedCornerShape(12.dp),
+            textStyle = TextStyle(color = Color.White)
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = { },
+            label = {
+                Text(
+                    text = "Password",
+                    color = Color.Gray
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            shape = RoundedCornerShape(12.dp),
+            textStyle = TextStyle(color = Color.White),
+            trailingIcon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_visibility),
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
+            }
+        )
+        Button(
+            onClick = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            colors = ButtonColors(
+                containerColor = colorResource(R.color.main_orange),
+                contentColor = Color.White,
+                disabledContentColor = Color.White,
+                disabledContainerColor = Color.Gray
+
+            )
+        ) {
+            Text(
+                text = "Sign Up",
+                color = Color.Black,
+                fontSize = 18.sp
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            HorizontalDivider(modifier = Modifier.weight(1f))
+            Text(
+                text = stringResource(R.string.or_text),
+                color = Color.White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+            HorizontalDivider(modifier = Modifier.weight(1f))
+        }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            SignInIcon(
+                painter = painterResource(R.drawable.ic_apple)
+            )
+            SignInIcon(
+                painter = painterResource(R.drawable.ic_google)
+            )
+            SignInIcon(
+                painter = painterResource(R.drawable.ic_facebook)
+            )
+        }
+        Row {
+            Text(
+                text = stringResource(R.string.you_dont_have_an_account_text),
+                color = Color.Gray
+            )
+            Text(
+                text = stringResource(R.string.sign_up_text),
+                color = colorResource(R.color.main_orange),
+                modifier = Modifier.padding(start = 4.dp)
+            )
+        }
     }
 }
 
