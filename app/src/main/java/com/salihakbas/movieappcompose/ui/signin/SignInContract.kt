@@ -11,7 +11,11 @@ object SignInContract {
     sealed class UiAction {
         data class EmailChanged(val email: String) : UiAction()
         data class PasswordChanged(val password: String) : UiAction()
+        data object SignInClicked : UiAction()
     }
 
-    sealed class UiEffect
+    sealed class UiEffect {
+        data object NavigateToSignUp : UiEffect()
+        data object NavigateToHome : UiEffect()
+    }
 }
