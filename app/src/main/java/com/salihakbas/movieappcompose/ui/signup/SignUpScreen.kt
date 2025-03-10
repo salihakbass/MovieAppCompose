@@ -1,5 +1,6 @@
 package com.salihakbas.movieappcompose.ui.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,16 +19,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.salihakbas.movieappcompose.R
+import com.salihakbas.movieappcompose.common.collectWithLifecycle
 import com.salihakbas.movieappcompose.ui.components.EmptyScreen
 import com.salihakbas.movieappcompose.ui.components.LoadingBar
 import com.salihakbas.movieappcompose.ui.signin.SignInIcon
@@ -35,23 +36,43 @@ import com.salihakbas.movieappcompose.ui.signup.SignUpContract.UiAction
 import com.salihakbas.movieappcompose.ui.signup.SignUpContract.UiEffect
 import com.salihakbas.movieappcompose.ui.signup.SignUpContract.UiState
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun SignUpScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
+    navigateToSignIn: () -> Unit
 ) {
+    val context = LocalContext.current
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is UiEffect.NavigateToSignIn -> navigateToSignIn()
+            is UiEffect.ShowSignUpToast -> {
+                Toast.makeText(
+                    context,
+                    "Lütfen tüm alanları doldurun veya şifre gereksinimlerini sağlayın.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    }
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
-        else -> SignUpContent()
+        else -> SignUpContent(
+            uiState = uiState,
+            onAction = onAction
+        )
     }
 }
 
 @Composable
-fun SignUpContent() {
+fun SignUpContent(
+    uiState: UiState,
+    onAction: (UiAction) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,8 +88,8 @@ fun SignUpContent() {
             color = Color.White
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
+            value = uiState.nameSurname,
+            onValueChange = { onAction(UiAction.OnNameSurnameChanged(it)) },
             label = {
                 Text(
                     text = "Full Name",
@@ -82,8 +103,8 @@ fun SignUpContent() {
             textStyle = TextStyle(color = Color.White)
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
+            value = uiState.email,
+            onValueChange = { onAction(UiAction.OnEmailChanged(it)) },
             label = {
                 Text(
                     text = "Email Address",
@@ -97,8 +118,8 @@ fun SignUpContent() {
             textStyle = TextStyle(color = Color.White)
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
+            value = uiState.phoneNumber,
+            onValueChange = { onAction(UiAction.OnPhoneNumberChanged(it)) },
             label = {
                 Text(
                     text = "Phone Number",
@@ -112,8 +133,8 @@ fun SignUpContent() {
             textStyle = TextStyle(color = Color.White)
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
+            value = uiState.password,
+            onValueChange = { onAction(UiAction.OnPasswordChanged(it)) },
             label = {
                 Text(
                     text = "Password",
@@ -134,7 +155,7 @@ fun SignUpContent() {
             }
         )
         Button(
-            onClick = {},
+            onClick = { onAction(UiAction.SignUpClicked) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -193,14 +214,16 @@ fun SignUpContent() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun SignUpScreenPreview(
-    @PreviewParameter(SignUpScreenPreviewProvider::class) uiState: UiState,
-) {
-    SignUpScreen(
-        uiState = uiState,
-        uiEffect = emptyFlow(),
-        onAction = {},
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun SignUpScreenPreview(
+//    @PreviewParameter(SignUpScreenPreviewProvider::class) uiState: UiState,
+//) {
+//    SignUpScreen(
+//        uiState = uiState,
+//        uiEffect = emptyFlow(),
+//        onAction = {},
+//        navigateToSignIn = {},
+//        errorState =
+//    )
+//}
