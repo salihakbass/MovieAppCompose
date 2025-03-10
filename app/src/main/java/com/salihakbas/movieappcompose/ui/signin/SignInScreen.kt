@@ -3,6 +3,7 @@ package com.salihakbas.movieappcompose.ui.signin
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.salihakbas.movieappcompose.R
+import com.salihakbas.movieappcompose.common.collectWithLifecycle
 import com.salihakbas.movieappcompose.ui.components.EmptyScreen
 import com.salihakbas.movieappcompose.ui.components.LoadingBar
 import com.salihakbas.movieappcompose.ui.signin.SignInContract.UiAction
@@ -51,13 +53,23 @@ fun SignInScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
+    navigateToSignUp: () -> Unit,
+    navigateToHome: () -> Unit
 ) {
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is UiEffect.NavigateToSignUp -> navigateToSignUp()
+            is UiEffect.NavigateToHome -> navigateToHome()
+        }
+
+    }
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
         else -> SignInContent(
             uiState = uiState,
-            onAction = onAction
+            onAction = onAction,
+            navigateToSignUp = navigateToSignUp
         )
     }
 }
@@ -65,7 +77,8 @@ fun SignInScreen(
 @Composable
 fun SignInContent(
     uiState: UiState,
-    onAction: (UiAction) -> Unit
+    onAction: (UiAction) -> Unit,
+    navigateToSignUp: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -109,7 +122,7 @@ fun SignInContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         Button(
-            onClick = {},
+            onClick = { onAction(UiAction.SignInClicked) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -166,6 +179,9 @@ fun SignInContent(
                 text = stringResource(R.string.sign_up_text),
                 color = colorResource(R.color.main_orange),
                 modifier = Modifier.padding(start = 4.dp)
+                    .clickable {
+                        navigateToSignUp()
+                    }
             )
         }
     }
@@ -207,5 +223,7 @@ fun SignInScreenPreview(
         uiState = uiState,
         uiEffect = emptyFlow(),
         onAction = {},
+        navigateToSignUp = {},
+        navigateToHome = {}
     )
 }
