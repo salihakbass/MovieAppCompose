@@ -8,7 +8,8 @@ object HomeContract {
         val list: List<String> = emptyList(),
         val popularMovieList: List<Movie> = emptyList(),
         val nowPlayingMovieList: List<Movie> = emptyList(),
-        val topRatedMovieList: List<Movie> = emptyList()
+        val topRatedMovieList: List<Movie> = emptyList(),
+        val upcomingMovieList: List<Movie> = emptyList(),
     )
 
     sealed class UiAction
