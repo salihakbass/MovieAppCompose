@@ -1,16 +1,16 @@
 package com.salihakbas.movieappcompose.domain.usecase
 
 import com.salihakbas.movieappcompose.data.model.Movie
-import com.salihakbas.movieappcompose.data.source.remote.MainService
+import com.salihakbas.movieappcompose.domain.repository.MainRepository
 import javax.inject.Inject
 
 class GetPopularMoviesUseCase @Inject constructor(
-    private val mainService: MainService
+    private val repository: MainRepository
 ) {
     suspend operator fun invoke(language: String = "en-US", page: Int = 1): Result<List<Movie>> {
         return try {
-            val movieResponse = mainService.getPopularMovies(language, page)
-            Result.success(movieResponse.results)
+            val movieResponse = repository.getPopularMovies(language, page)
+            Result.success(movieResponse)
         } catch (e: Exception) {
             Result.failure(e)
         }
