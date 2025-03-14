@@ -26,4 +26,11 @@ interface MainService {
         @Query("page") page: Int = 1,
         @Query("region") region: String? = null
     ): MovieResponse
+
+    @GET("movie/upcoming")
+    suspend fun getUpcomingMovies(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("region") region: String? = null
+    ): MovieResponse
 }
