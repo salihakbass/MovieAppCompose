@@ -46,4 +46,10 @@ interface MainRepository {
         timezone: String? = null
     ): List<Series>
 
+    suspend fun getTopRatedSeries(
+        language: String = "en-US",
+        page: Int = 1,
+        timezone: String? = null
+    ): List<Series>
+
 }

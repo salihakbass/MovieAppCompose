@@ -55,4 +55,11 @@ interface MainService {
         @Query("page") page: Int = 1,
         @Query("timezone") timezone: String? = null
     ): SeriesResponse
+
+    @GET("tv/popular")
+    suspend fun getTopRatedSeries(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("timezone") timezone: String? = null
+    ): SeriesResponse
 }

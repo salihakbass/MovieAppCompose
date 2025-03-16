@@ -67,4 +67,12 @@ class MainRepositoryImpl @Inject constructor(
         return mainService.getPopularSeries(language, page, timezone).results
     }
 
+    override suspend fun getTopRatedSeries(
+        language: String,
+        page: Int,
+        timezone: String?
+    ): List<Series> {
+        return mainService.getTopRatedSeries(language, page, timezone).results
+    }
+
 }
