@@ -8,6 +8,7 @@ import com.salihakbas.movieappcompose.domain.usecase.GetOnTheAirSeriesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.GetPopularMoviesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.GetPopularSeriesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.GetTopRatedMoviesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.GetTopRatedSeriesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.GetUpcomingMoviesUseCase
 import com.salihakbas.movieappcompose.ui.home.HomeContract.UiAction
 import com.salihakbas.movieappcompose.ui.home.HomeContract.UiEffect
@@ -31,7 +32,8 @@ class HomeViewModel @Inject constructor(
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     private val getAiringTodayTvSeriesUseCase: GetAiringTodayTvSeriesUseCase,
     private val getOnTheAirSeriesUseCase: GetOnTheAirSeriesUseCase,
-    private val getPopularSeriesUseCase: GetPopularSeriesUseCase
+    private val getPopularSeriesUseCase: GetPopularSeriesUseCase,
+    private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -48,6 +50,7 @@ class HomeViewModel @Inject constructor(
         getAiringTodayTvSeries()
         getOnTheAirSeries()
         getPopularSeries()
+        getTopRatedSeries()
     }
 
     fun onAction(uiAction: UiAction) {
@@ -126,6 +129,17 @@ class HomeViewModel @Inject constructor(
         updateUiState { copy(isLoading = false) }
         result.onSuccess { series ->
             updateUiState { copy(popularSeriesList = series) }
+        }.onFailure {
+
+        }
+    }
+
+    private fun getTopRatedSeries() = viewModelScope.launch {
+        updateUiState { copy(isLoading = true) }
+        val result = getTopRatedSeriesUseCase()
+        updateUiState { copy(isLoading = false) }
+        result.onSuccess { series ->
+            updateUiState { copy(topRatedSeriesList = series) }
         }.onFailure {
 
         }
