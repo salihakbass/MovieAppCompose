@@ -1,6 +1,7 @@
 package com.salihakbas.movieappcompose.data.source.remote
 
 import com.salihakbas.movieappcompose.data.model.MovieResponse
+import com.salihakbas.movieappcompose.data.model.SeriesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -33,4 +34,25 @@ interface MainService {
         @Query("page") page: Int = 1,
         @Query("region") region: String? = null
     ): MovieResponse
+
+    @GET("tv/airing_today")
+    suspend fun getAiringTodayTvSeries(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("timezone") timezone: String? = null
+    ): SeriesResponse
+
+    @GET("tv/on_the_air")
+    suspend fun getOnTheAirSeries(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("timezone") timezone: String? = null
+    ): SeriesResponse
+
+    @GET("tv/popular")
+    suspend fun getPopularSeries(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("timezone") timezone: String? = null
+    ): SeriesResponse
 }

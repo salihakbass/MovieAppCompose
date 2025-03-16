@@ -1,6 +1,7 @@
 package com.salihakbas.movieappcompose.data.repository
 
 import com.salihakbas.movieappcompose.data.model.Movie
+import com.salihakbas.movieappcompose.data.model.Series
 import com.salihakbas.movieappcompose.data.source.local.MainDao
 import com.salihakbas.movieappcompose.data.source.remote.MainService
 import com.salihakbas.movieappcompose.domain.repository.MainRepository
@@ -40,6 +41,30 @@ class MainRepositoryImpl @Inject constructor(
         region: String?
     ): List<Movie> {
         return mainService.getUpcomingMovies(language, page, region).results
+    }
+
+    override suspend fun getAiringTodayTvSeries(
+        language: String,
+        page: Int,
+        timezone: String?
+    ): List<Series> {
+        return mainService.getAiringTodayTvSeries(language, page, timezone).results
+    }
+
+    override suspend fun getOnTheAirSeries(
+        language: String,
+        page: Int,
+        timezone: String?
+    ): List<Series> {
+        return mainService.getOnTheAirSeries(language, page, timezone).results
+    }
+
+    override suspend fun getPopularSeries(
+        language: String,
+        page: Int,
+        timezone: String?
+    ): List<Series> {
+        return mainService.getPopularSeries(language, page, timezone).results
     }
 
 }
