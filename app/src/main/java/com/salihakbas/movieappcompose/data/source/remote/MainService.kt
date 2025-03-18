@@ -1,8 +1,10 @@
 package com.salihakbas.movieappcompose.data.source.remote
 
+import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
 import com.salihakbas.movieappcompose.data.model.MovieResponse
 import com.salihakbas.movieappcompose.data.model.SeriesResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MainService {
@@ -62,4 +64,11 @@ interface MainService {
         @Query("page") page: Int = 1,
         @Query("timezone") timezone: String? = null
     ): SeriesResponse
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetail(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = "en-US",
+        @Query("append_to_response") appendToResponse: String? = null
+    ): MovieDetailResponse
 }
