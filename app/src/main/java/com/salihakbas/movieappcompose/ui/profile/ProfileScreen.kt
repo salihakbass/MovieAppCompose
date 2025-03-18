@@ -1,9 +1,8 @@
 package com.salihakbas.movieappcompose.ui.profile
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,11 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -39,8 +35,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import com.salihakbas.movieappcompose.R
+import com.salihakbas.movieappcompose.common.collectWithLifecycle
 import com.salihakbas.movieappcompose.ui.components.EmptyScreen
 import com.salihakbas.movieappcompose.ui.components.LoadingBar
 import com.salihakbas.movieappcompose.ui.profile.ProfileContract.UiAction
@@ -54,16 +50,29 @@ fun ProfileScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
+    navigateToSubscribe: () -> Unit
 ) {
+    uiEffect.collectWithLifecycle {
+        when (it) {
+            UiEffect.NavigateToSubscribe -> {
+                navigateToSubscribe()
+            }
+        }
+    }
+
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
-        else -> ProfileContent()
+        else -> ProfileContent(
+            navigateToSubscribe
+        )
     }
 }
 
 @Composable
-fun ProfileContent() {
+fun ProfileContent(
+    navigateToSubscribe: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -71,13 +80,13 @@ fun ProfileContent() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Box(
             modifier = Modifier
                 .padding(16.dp)
-                .clip(shape = RoundedCornerShape(16.dp))
-                .background(color = colorResource(R.color.light_blue))
-                .border(1.dp, Color.LightGray)
+                .background(
+                    color = colorResource(R.color.light_blue),
+                    shape = RoundedCornerShape(16.dp)
+                )
                 .fillMaxWidth()
                 .height(300.dp),
             contentAlignment = Alignment.Center
@@ -101,85 +110,7 @@ fun ProfileContent() {
                     color = Color.White,
                     fontWeight = FontWeight.Bold
                 )
-                Box(
-                    modifier = Modifier
-                        .clip(shape = RoundedCornerShape(8.dp))
-                        .border(1.dp, Color.Gray)
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = "Total hours watched",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                buildAnnotatedString {
-                                    withStyle(
-                                        style = SpanStyle(
-                                            fontSize = 24.sp,
-                                            color = Color.White,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    ) {
-                                        append("20")
-                                    }
-                                    withStyle(
-                                        style = SpanStyle(
-                                            fontSize = 16.sp,
-                                            color = Color.White
-                                        )
-                                    ) {
-                                        append(" Hours")
-                                    }
-                                }
-                            )
-                        }
-                        VerticalDivider(
-                            modifier = Modifier
-                                .height(60.dp)
-                        )
-                        Column(
-                            modifier = Modifier.padding(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = "Total film watched",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                buildAnnotatedString {
-                                    withStyle(
-                                        style = SpanStyle(
-                                            fontSize = 24.sp,
-                                            color = Color.White,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    ) {
-                                        append("50")
-                                    }
-                                    withStyle(
-                                        style = SpanStyle(
-                                            fontSize = 16.sp,
-                                            color = Color.White
-                                        )
-                                    ) {
-                                        append(" Film")
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }
+                ProfileStats()
                 OutlinedButton(
                     onClick = {},
                     modifier = Modifier
@@ -198,7 +129,8 @@ fun ProfileContent() {
         }
         ProfileButtons(
             painter = painterResource(R.drawable.ic_subscribe),
-            text = "Subscribe"
+            text = "Subscribe",
+            navigate = navigateToSubscribe
         )
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(
@@ -206,7 +138,8 @@ fun ProfileContent() {
         )
         ProfileButtons(
             painter = painterResource(R.drawable.ic_settings),
-            text = "App Settings"
+            text = "App Settings",
+            navigate = {}
         )
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(
@@ -214,7 +147,8 @@ fun ProfileContent() {
         )
         ProfileButtons(
             painter = painterResource(R.drawable.ic_info),
-            text = "About"
+            text = "About",
+            navigate = {}
         )
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(
@@ -222,7 +156,8 @@ fun ProfileContent() {
         )
         ProfileButtons(
             painter = painterResource(R.drawable.ic_signout),
-            text = "Sign Out"
+            text = "Sign Out",
+            navigate = {}
         )
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(
@@ -234,7 +169,8 @@ fun ProfileContent() {
 @Composable
 fun ProfileButtons(
     painter: Painter,
-    text: String
+    text: String,
+    navigate: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -245,21 +181,108 @@ fun ProfileButtons(
         Icon(
             painter = painter,
             contentDescription = null,
-            tint = Color.White
+            tint = Color.White,
+            modifier = Modifier
+                .clickable {
+                    navigate()
+                }
         )
         Spacer(modifier = Modifier.width(32.dp))
         Text(
             text = text,
             color = Color.White,
             fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier
+                .clickable {
+                    navigate()
+                }
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             painter = painterResource(R.drawable.ic_arrow_right),
             contentDescription = null,
-            tint = Color.White
+            tint = Color.White,
+            modifier = Modifier
+                .clickable {
+                    navigate()
+                }
         )
+    }
+}
+
+@Composable
+fun ProfileStats() {
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "Total hours watched",
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            fontSize = 24.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append("20")
+                    }
+                    withStyle(
+                        style = SpanStyle(
+                            fontSize = 16.sp,
+                            color = Color.White
+                        )
+                    ) {
+                        append(" Hours")
+                    }
+                }
+            )
+        }
+        VerticalDivider(
+            modifier = Modifier
+                .height(60.dp)
+        )
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "Total film watched",
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            fontSize = 24.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append("50")
+                    }
+                    withStyle(
+                        style = SpanStyle(
+                            fontSize = 16.sp,
+                            color = Color.White
+                        )
+                    ) {
+                        append(" Film")
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -272,5 +295,6 @@ fun ProfileScreenPreview(
         uiState = uiState,
         uiEffect = emptyFlow(),
         onAction = {},
+        navigateToSubscribe = {}
     )
 }
