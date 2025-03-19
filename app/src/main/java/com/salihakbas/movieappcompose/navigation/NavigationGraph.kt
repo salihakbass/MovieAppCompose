@@ -8,48 +8,48 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.salihakbas.movieappcompose.navigation.Screen.Splash
+import com.salihakbas.movieappcompose.navigation.Screen.Detail
+import com.salihakbas.movieappcompose.navigation.Screen.Explore
+import com.salihakbas.movieappcompose.navigation.Screen.Favorite
+import com.salihakbas.movieappcompose.navigation.Screen.Home
+import com.salihakbas.movieappcompose.navigation.Screen.Notification
 import com.salihakbas.movieappcompose.navigation.Screen.Onboarding
+import com.salihakbas.movieappcompose.navigation.Screen.Payment
+import com.salihakbas.movieappcompose.navigation.Screen.Profile
+import com.salihakbas.movieappcompose.navigation.Screen.Search
 import com.salihakbas.movieappcompose.navigation.Screen.SignIn
 import com.salihakbas.movieappcompose.navigation.Screen.SignUp
-import com.salihakbas.movieappcompose.navigation.Screen.Home
-import com.salihakbas.movieappcompose.navigation.Screen.Detail
-import com.salihakbas.movieappcompose.navigation.Screen.Trailer
-import com.salihakbas.movieappcompose.navigation.Screen.Notification
-import com.salihakbas.movieappcompose.navigation.Screen.Explore
-import com.salihakbas.movieappcompose.navigation.Screen.Search
-import com.salihakbas.movieappcompose.navigation.Screen.Favorite
-import com.salihakbas.movieappcompose.navigation.Screen.Profile
+import com.salihakbas.movieappcompose.navigation.Screen.Splash
 import com.salihakbas.movieappcompose.navigation.Screen.Subscribe
-import com.salihakbas.movieappcompose.navigation.Screen.Payment
-import com.salihakbas.movieappcompose.ui.splash.SplashScreen
-import com.salihakbas.movieappcompose.ui.splash.SplashViewModel
+import com.salihakbas.movieappcompose.navigation.Screen.Trailer
+import com.salihakbas.movieappcompose.ui.detail.DetailScreen
+import com.salihakbas.movieappcompose.ui.detail.DetailViewModel
+import com.salihakbas.movieappcompose.ui.explore.ExploreScreen
+import com.salihakbas.movieappcompose.ui.explore.ExploreViewModel
+import com.salihakbas.movieappcompose.ui.favorite.FavoriteScreen
+import com.salihakbas.movieappcompose.ui.favorite.FavoriteViewModel
+import com.salihakbas.movieappcompose.ui.home.HomeScreen
+import com.salihakbas.movieappcompose.ui.home.HomeViewModel
+import com.salihakbas.movieappcompose.ui.notification.NotificationScreen
+import com.salihakbas.movieappcompose.ui.notification.NotificationViewModel
 import com.salihakbas.movieappcompose.ui.onboarding.OnboardingScreen
 import com.salihakbas.movieappcompose.ui.onboarding.OnboardingViewModel
+import com.salihakbas.movieappcompose.ui.payment.PaymentScreen
+import com.salihakbas.movieappcompose.ui.payment.PaymentViewModel
+import com.salihakbas.movieappcompose.ui.profile.ProfileScreen
+import com.salihakbas.movieappcompose.ui.profile.ProfileViewModel
+import com.salihakbas.movieappcompose.ui.search.SearchScreen
+import com.salihakbas.movieappcompose.ui.search.SearchViewModel
 import com.salihakbas.movieappcompose.ui.signin.SignInScreen
 import com.salihakbas.movieappcompose.ui.signin.SignInViewModel
 import com.salihakbas.movieappcompose.ui.signup.SignUpScreen
 import com.salihakbas.movieappcompose.ui.signup.SignUpViewModel
-import com.salihakbas.movieappcompose.ui.home.HomeScreen
-import com.salihakbas.movieappcompose.ui.home.HomeViewModel
-import com.salihakbas.movieappcompose.ui.detail.DetailScreen
-import com.salihakbas.movieappcompose.ui.detail.DetailViewModel
-import com.salihakbas.movieappcompose.ui.trailer.TrailerScreen
-import com.salihakbas.movieappcompose.ui.trailer.TrailerViewModel
-import com.salihakbas.movieappcompose.ui.notification.NotificationScreen
-import com.salihakbas.movieappcompose.ui.notification.NotificationViewModel
-import com.salihakbas.movieappcompose.ui.explore.ExploreScreen
-import com.salihakbas.movieappcompose.ui.explore.ExploreViewModel
-import com.salihakbas.movieappcompose.ui.search.SearchScreen
-import com.salihakbas.movieappcompose.ui.search.SearchViewModel
-import com.salihakbas.movieappcompose.ui.favorite.FavoriteScreen
-import com.salihakbas.movieappcompose.ui.favorite.FavoriteViewModel
-import com.salihakbas.movieappcompose.ui.profile.ProfileScreen
-import com.salihakbas.movieappcompose.ui.profile.ProfileViewModel
+import com.salihakbas.movieappcompose.ui.splash.SplashScreen
+import com.salihakbas.movieappcompose.ui.splash.SplashViewModel
 import com.salihakbas.movieappcompose.ui.subscribe.SubscribeScreen
 import com.salihakbas.movieappcompose.ui.subscribe.SubscribeViewModel
-import com.salihakbas.movieappcompose.ui.payment.PaymentScreen
-import com.salihakbas.movieappcompose.ui.payment.PaymentViewModel
+import com.salihakbas.movieappcompose.ui.trailer.TrailerScreen
+import com.salihakbas.movieappcompose.ui.trailer.TrailerViewModel
 
 @Composable
 fun NavigationGraph(
@@ -90,7 +90,9 @@ fun NavigationGraph(
             SignInScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateToSignUp = { navController.navigate(SignUp) },
+                navigateToHome = { navController.navigate(Home) }
             )
         }
         composable<SignUp> {
@@ -100,7 +102,8 @@ fun NavigationGraph(
             SignUpScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateToSignIn = { navController.navigate(SignIn) }
             )
         }
         composable<Home> {
@@ -180,7 +183,8 @@ fun NavigationGraph(
             ProfileScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateToSubscribe = { navController.navigate(Subscribe) }
             )
         }
         composable<Subscribe> {
@@ -190,7 +194,9 @@ fun NavigationGraph(
             SubscribeScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateToPayment = { navController.navigate(Payment) },
+                navigateToBack = { navController.popBackStack() }
             )
         }
         composable<Payment> {
@@ -200,7 +206,8 @@ fun NavigationGraph(
             PaymentScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateBack = { navController.popBackStack() }
             )
         }
     }
