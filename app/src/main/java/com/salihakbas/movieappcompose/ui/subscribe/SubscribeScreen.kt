@@ -2,6 +2,7 @@ package com.salihakbas.movieappcompose.ui.subscribe
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,25 +53,29 @@ fun SubscribeScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
-    navigateToPayment: () -> Unit
+    navigateToPayment: () -> Unit,
+    navigateToBack: () -> Unit
 ) {
     uiEffect.collectWithLifecycle {
         when (it) {
             is UiEffect.NavigateToPayment -> navigateToPayment()
+            is UiEffect.NavigateToBack -> navigateToBack()
         }
     }
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
         else -> SubscribeContent(
-            navigateToPayment = navigateToPayment
+            navigateToPayment = navigateToPayment,
+            navigateToBack = navigateToBack
         )
     }
 }
 
 @Composable
 fun SubscribeContent(
-    navigateToPayment: () -> Unit
+    navigateToPayment: () -> Unit,
+    navigateToBack: () -> Unit
 ) {
     val tabList = listOf("Monthly", "Yearly")
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -87,7 +92,11 @@ fun SubscribeContent(
                 painter = painterResource(R.drawable.ic_arrow_left),
                 contentDescription = null,
                 tint = colorResource(R.color.main_orange),
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier
+                    .size(36.dp)
+                    .clickable {
+                        navigateToBack()
+                    }
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
@@ -236,6 +245,7 @@ fun SubscribeScreenPreview(
         uiState = uiState,
         uiEffect = emptyFlow(),
         onAction = {},
-        navigateToPayment = {}
+        navigateToPayment = {},
+        navigateToBack = {}
     )
 }

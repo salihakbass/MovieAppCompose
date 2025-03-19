@@ -10,5 +10,6 @@ object SubscribeContract {
 
     sealed class UiEffect {
         data object NavigateToPayment : UiEffect()
+        data object NavigateToBack : UiEffect()
     }
 }
