@@ -20,4 +20,8 @@
     <string name="premium_features_text_3">Download your favorite films and watch without an internet connection.</string>
     <string name="premium_features_text_4">Enjoy the best viewing experience with high-definition quality.</string>
     <string name="premium_features_text_5">Support for multiple languages for your viewing comfort.</string>
+    <string name="home_text">Home</string>
+    <string name="explore_text">Explore</string>
+    <string name="favorite_text">Favorite</string>
+    <string name="account_text">Account</string>
 </resources>
