@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId = "com.salihakbas.movieappcompose"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -105,6 +105,9 @@ dependencies {
 
     // Firebase
     implementation(platform(libs.firebase))
+
+    implementation ("com.google.accompanist:accompanist-pager:0.31.1-alpha")
+
 }
 
 detekt {
