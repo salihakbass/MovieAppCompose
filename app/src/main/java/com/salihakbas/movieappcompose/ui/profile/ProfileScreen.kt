@@ -175,38 +175,29 @@ fun ProfileButtons(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable {
+                navigate()
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             painter = painter,
             contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .clickable {
-                    navigate()
-                }
+            tint = Color.White
         )
         Spacer(modifier = Modifier.width(32.dp))
         Text(
             text = text,
             color = Color.White,
             fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier
-                .clickable {
-                    navigate()
-                }
+            fontWeight = FontWeight.SemiBold
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             painter = painterResource(R.drawable.ic_arrow_right),
             contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .clickable {
-                    navigate()
-                }
+            tint = Color.White
         )
     }
 }
