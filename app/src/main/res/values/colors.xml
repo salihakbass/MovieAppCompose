@@ -9,5 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="main_orange">#FF8F00</color>
     <color name="main_blue_bg">#1A2130</color>
-    <color name="light_blue_bg">#303744</color>
+    <color name="light_blue_bg">#303744</color>,
+    <color name="light_blue">#2F3647</color>
+    <color name="subscribe_card_bg">#302C2B</color>
+    <color name="payment_card_bg">#171E2B</color>
+    <color name="bottom_sheet_button_bg">#1CAE82</color>
+    <color name="bottom_sheet_bg">#D5D9E3</color>,
+    <color name="bottom_sheet_text">#BAC2D4</color>
 </resources>
