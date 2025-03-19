@@ -78,7 +78,7 @@ fun HomeContent(
     val airingTodaySeries = uiState.airingTodayTvSeriesList.take(6)
     val pagerStateMovies = rememberPagerState { upcomingMovies.size }
     val pagerStateSeries = rememberPagerState { airingTodaySeries.size }
-    val tabs = listOf("Movies", "Series", "Animation")
+    val tabs = listOf("Movies", "TV Series", "Animation")
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     Column(
         modifier = Modifier
