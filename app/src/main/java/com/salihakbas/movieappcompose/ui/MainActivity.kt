@@ -7,10 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.salihakbas.movieappcompose.R
 import com.salihakbas.movieappcompose.navigation.BottomNavigation
 import com.salihakbas.movieappcompose.navigation.NavigationGraph
 import com.salihakbas.movieappcompose.navigation.Screen
@@ -26,6 +30,13 @@ class MainActivity : ComponentActivity() {
             MyappTheme {
                 val navController = rememberNavController()
                 val startDestination = Screen.Home
+
+                val systemUiController = rememberSystemUiController()
+                val backgroundColor = colorResource(R.color.main_blue_bg)
+
+                SideEffect {
+                    systemUiController.setStatusBarColor(color = backgroundColor)
+                }
 
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = currentBackStackEntry?.destination?.route
