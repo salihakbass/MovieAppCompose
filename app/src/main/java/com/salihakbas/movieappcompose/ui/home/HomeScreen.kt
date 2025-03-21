@@ -1,6 +1,7 @@
 package com.salihakbas.movieappcompose.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,19 +61,22 @@ fun HomeScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
+    navigateToDetail: (Int) -> Unit
 ) {
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
         else -> HomeContent(
-            uiState = uiState
+            uiState = uiState,
+            navigateToDetail
         )
     }
 }
 
 @Composable
 fun HomeContent(
-    uiState: UiState
+    uiState: UiState,
+    navigateToDetail: (Int) -> Unit
 ) {
     val upcomingMovies = uiState.upcomingMovieList.take(6)
     val airingTodaySeries = uiState.airingTodayTvSeriesList.take(6)
@@ -104,7 +108,7 @@ fun HomeContent(
             )
             Spacer(modifier = Modifier.height(24.dp))
             when (selectedTabIndex) {
-                0 -> MovieSection(uiState, pagerStateMovies, upcomingMovies)
+                0 -> MovieSection(uiState, pagerStateMovies, upcomingMovies, navigateToDetail)
                 1 -> SeriesSection(uiState, pagerStateSeries, airingTodaySeries)
             }
         }
@@ -250,19 +254,27 @@ fun SeriesItem(
 }
 
 @Composable
-fun MovieImageItem(movie: Movie) {
+fun MovieImageItem(
+    movie: Movie,
+    navigateToDetail: (Int) -> Unit
+) {
     AsyncImage(
         model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
         contentDescription = movie.title,
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp)),
+            .clip(RoundedCornerShape(16.dp))
+            .clickable {
+                navigateToDetail(movie.id)
+            },
         contentScale = ContentScale.FillBounds
     )
 }
 
 @Composable
-fun SeriesImageItem(series: Series) {
+fun SeriesImageItem(
+    series: Series
+) {
     AsyncImage(
         model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
         contentDescription = series.name,
@@ -277,7 +289,8 @@ fun SeriesImageItem(series: Series) {
 fun MovieSection(
     uiState: UiState,
     pagerState: PagerState,
-    upcomingMovies: List<Movie>
+    upcomingMovies: List<Movie>,
+    navigateToDetail: (Int) -> Unit
 ) {
     Column {
         Text(
@@ -302,7 +315,7 @@ fun MovieSection(
                         .fillMaxWidth()
                         .height(300.dp)
                 ) { page ->
-                    MovieImageItem(upcomingMovies[page])
+                    MovieImageItem(upcomingMovies[page], navigateToDetail)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -324,7 +337,7 @@ fun MovieSection(
             modifier = Modifier.fillMaxWidth(),
         ) {
             items(uiState.nowPlayingMovieList.shuffled()) { movie ->
-                MovieItem(movie)
+                MovieItem(movie, navigateToDetail)
             }
         }
         Text(
@@ -338,7 +351,7 @@ fun MovieSection(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(uiState.popularMovieList.shuffled()) { movie ->
-                MovieItem(movie)
+                MovieItem(movie, navigateToDetail)
             }
         }
         Text(
@@ -352,20 +365,26 @@ fun MovieSection(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(uiState.topRatedMovieList.shuffled()) { movie ->
-                MovieItem(movie)
+                MovieItem(movie, navigateToDetail)
             }
         }
     }
 }
 
 @Composable
-fun MovieItem(movie: Movie) {
+fun MovieItem(
+    movie: Movie,
+    navigateToDetail: (Int) -> Unit
+) {
     Column(
         modifier = Modifier
             .padding(
                 vertical = 8.dp,
                 horizontal = 4.dp
             )
+            .clickable {
+                navigateToDetail(movie.id)
+            }
     ) {
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
@@ -449,5 +468,6 @@ fun HomeScreenPreview(
         uiState = uiState,
         uiEffect = emptyFlow(),
         onAction = {},
+        navigateToDetail = {}
     )
 }

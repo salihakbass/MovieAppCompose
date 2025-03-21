@@ -19,5 +19,7 @@ object HomeContract {
 
     sealed class UiAction
 
-    sealed class UiEffect
+    sealed class UiEffect {
+        data class NavigateToDetail(val movieId: Int) : UiEffect()
+    }
 }
