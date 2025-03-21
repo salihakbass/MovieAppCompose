@@ -106,7 +106,8 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase))
 
-    implementation ("com.google.accompanist:accompanist-pager:0.31.1-alpha")
+    implementation (libs.accompanist.pager)
+    implementation (libs.accompanist.systemuicontroller)
 
 }
 
