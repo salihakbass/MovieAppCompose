@@ -19,7 +19,7 @@ sealed interface Screen {
     data object Home : Screen
 
     @Serializable
-    data object Detail : Screen
+    data class Detail(val movieId: Int) : Screen
 
     @Serializable
     data object Trailer : Screen
