@@ -6,8 +6,10 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.salihakbas.movieappcompose.navigation.Screen.Detail
 import com.salihakbas.movieappcompose.navigation.Screen.Explore
 import com.salihakbas.movieappcompose.navigation.Screen.Favorite
@@ -113,17 +115,24 @@ fun NavigationGraph(
             HomeScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateToDetail = { movieId ->
+                    navController.navigate("${Screen.getRoute(Detail(0))}/$movieId")
+                }
             )
         }
-        composable<Detail> {
+        composable(
+            route = "${Screen.getRoute(Detail(0))}/{movieId}",
+            arguments = listOf(navArgument("movieId") { type = NavType.IntType })
+        ) {
             val viewModel: DetailViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
             DetailScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateBack = { navController.popBackStack() }
             )
         }
         composable<Trailer> {
