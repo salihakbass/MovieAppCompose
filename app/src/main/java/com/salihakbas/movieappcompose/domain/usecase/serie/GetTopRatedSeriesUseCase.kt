@@ -1,4 +1,4 @@
-package com.salihakbas.movieappcompose.domain.usecase
+package com.salihakbas.movieappcompose.domain.usecase.serie
 
 import com.salihakbas.movieappcompose.data.model.Series
 import com.salihakbas.movieappcompose.domain.repository.MainRepository
