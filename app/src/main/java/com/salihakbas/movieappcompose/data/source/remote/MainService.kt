@@ -3,7 +3,9 @@ package com.salihakbas.movieappcompose.data.source.remote
 import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
 import com.salihakbas.movieappcompose.data.model.MovieResponse
+import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
 import com.salihakbas.movieappcompose.data.model.SeriesResponse
+import com.salihakbas.movieappcompose.data.model.TvShowResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -78,4 +80,17 @@ interface MainService {
         @Path("movie_id") movieId: Int,
         @Query("language") language: String = "en-US"
     ): MovieCreditsResponse
+
+    @GET("tv/{series_id}")
+    suspend fun getSerieDetail(
+        @Path("series_id") seriesId: Int,
+        @Query("language") language: String = "en-US",
+        @Query("append_to_response") appendToResponse: String? = null
+    ) : TvShowResponse
+
+    @GET("tv/{series_id}/credits")
+    suspend fun getSerieCredits(
+        @Path("series_id") seriesId: Int,
+        @Query("language") language: String = "en-US"
+    ) : SeriesCreditsResponse
 }

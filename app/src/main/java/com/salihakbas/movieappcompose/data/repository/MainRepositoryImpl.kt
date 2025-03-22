@@ -4,6 +4,8 @@ import com.salihakbas.movieappcompose.data.model.Movie
 import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
 import com.salihakbas.movieappcompose.data.model.Series
+import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
+import com.salihakbas.movieappcompose.data.model.TvShowResponse
 import com.salihakbas.movieappcompose.data.source.local.MainDao
 import com.salihakbas.movieappcompose.data.source.remote.MainService
 import com.salihakbas.movieappcompose.domain.repository.MainRepository
@@ -87,6 +89,18 @@ class MainRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieCredits(movieId: Int, language: String): MovieCreditsResponse {
         return mainService.getMovieCredits(movieId, language)
+    }
+
+    override suspend fun getSeriesDetail(
+        seriesId: Int,
+        language: String,
+        appendToResponse: String?
+    ): TvShowResponse {
+        return mainService.getSerieDetail(seriesId, language, appendToResponse)
+    }
+
+    override suspend fun getSeriesCredits(seriesId: Int, language: String): SeriesCreditsResponse {
+        return mainService.getSerieCredits(seriesId, language)
     }
 
 }

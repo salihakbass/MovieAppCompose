@@ -4,6 +4,8 @@ import com.salihakbas.movieappcompose.data.model.Movie
 import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
 import com.salihakbas.movieappcompose.data.model.Series
+import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
+import com.salihakbas.movieappcompose.data.model.TvShowResponse
 
 interface MainRepository {
     suspend fun getPopularMovies(
@@ -63,6 +65,17 @@ interface MainRepository {
     suspend fun getMovieCredits(
         movieId: Int,
         language: String = "en-US"
-    ) : MovieCreditsResponse
+    ): MovieCreditsResponse
+
+    suspend fun getSeriesDetail(
+        seriesId: Int,
+        language: String = "en-US",
+        appendToResponse: String? = null
+    ): TvShowResponse
+
+    suspend fun getSeriesCredits(
+        seriesId: Int,
+        language: String = "en-US"
+    ) : SeriesCreditsResponse
 
 }
