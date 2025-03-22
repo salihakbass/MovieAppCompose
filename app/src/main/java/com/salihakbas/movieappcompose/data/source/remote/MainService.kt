@@ -1,5 +1,6 @@
 package com.salihakbas.movieappcompose.data.source.remote
 
+import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
 import com.salihakbas.movieappcompose.data.model.MovieResponse
 import com.salihakbas.movieappcompose.data.model.SeriesResponse
@@ -71,4 +72,10 @@ interface MainService {
         @Query("language") language: String = "en-US",
         @Query("append_to_response") appendToResponse: String? = null
     ): MovieDetailResponse
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getMovieCredits(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = "en-US"
+    ): MovieCreditsResponse
 }

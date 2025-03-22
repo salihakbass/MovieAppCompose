@@ -1,6 +1,7 @@
 package com.salihakbas.movieappcompose.domain.repository
 
 import com.salihakbas.movieappcompose.data.model.Movie
+import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
 import com.salihakbas.movieappcompose.data.model.Series
 
@@ -58,5 +59,10 @@ interface MainRepository {
         language: String = "en-US",
         appendToResponse: String? = null
     ): MovieDetailResponse
+
+    suspend fun getMovieCredits(
+        movieId: Int,
+        language: String = "en-US"
+    ) : MovieCreditsResponse
 
 }
