@@ -2,14 +2,14 @@ package com.salihakbas.movieappcompose.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.salihakbas.movieappcompose.domain.usecase.GetAiringTodayTvSeriesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.GetNowPlayingMoviesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.GetOnTheAirSeriesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.GetPopularMoviesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.GetPopularSeriesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.GetTopRatedMoviesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.GetTopRatedSeriesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.GetUpcomingMoviesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.serie.GetAiringTodayTvSeriesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.movie.GetNowPlayingMoviesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.serie.GetOnTheAirSeriesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.movie.GetPopularMoviesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.serie.GetPopularSeriesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.movie.GetTopRatedMoviesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.serie.GetTopRatedSeriesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.movie.GetUpcomingMoviesUseCase
 import com.salihakbas.movieappcompose.ui.home.HomeContract.UiAction
 import com.salihakbas.movieappcompose.ui.home.HomeContract.UiEffect
 import com.salihakbas.movieappcompose.ui.home.HomeContract.UiState

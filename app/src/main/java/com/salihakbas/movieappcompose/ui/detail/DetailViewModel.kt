@@ -3,7 +3,8 @@ package com.salihakbas.movieappcompose.ui.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.salihakbas.movieappcompose.domain.usecase.GetMovieDetailUseCase
+import com.salihakbas.movieappcompose.domain.usecase.movie.GetMovieCreditsUseCase
+import com.salihakbas.movieappcompose.domain.usecase.movie.GetMovieDetailUseCase
 import com.salihakbas.movieappcompose.ui.detail.DetailContract.UiAction
 import com.salihakbas.movieappcompose.ui.detail.DetailContract.UiEffect
 import com.salihakbas.movieappcompose.ui.detail.DetailContract.UiState
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getMovieDetailUseCase: GetMovieDetailUseCase
+    private val getMovieDetailUseCase: GetMovieDetailUseCase,
+    private val getMovieCreditsUseCase: GetMovieCreditsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -33,6 +35,7 @@ class DetailViewModel @Inject constructor(
     init {
         val movieId = savedStateHandle.get<Int>("movieId") ?: 0
         getMovieDetail(movieId)
+        getMovieCredits(movieId)
     }
 
     fun onAction(uiAction: UiAction) {
@@ -44,6 +47,15 @@ class DetailViewModel @Inject constructor(
         try {
             val movieDetail = getMovieDetailUseCase(movieId)
             updateUiState { copy(isLoading = false, movie = movieDetail) }
+        } catch (e: Exception) {
+            updateUiState { copy(isLoading = false) }
+        }
+    }
+
+    private fun getMovieCredits(movieId: Int) = viewModelScope.launch {
+        try {
+            val movieCredits = getMovieCreditsUseCase(movieId)
+            updateUiState { copy(isLoading = false, movieCredit = movieCredits) }
         } catch (e: Exception) {
             updateUiState { copy(isLoading = false) }
         }
