@@ -1,7 +1,9 @@
 package com.salihakbas.movieappcompose.ui.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,13 +12,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,13 +33,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.salihakbas.movieappcompose.R
-import com.salihakbas.movieappcompose.data.model.ProductionCompany
+import com.salihakbas.movieappcompose.common.collectWithLifecycle
+import com.salihakbas.movieappcompose.data.model.Cast
+import com.salihakbas.movieappcompose.data.model.Crew
+import com.salihakbas.movieappcompose.data.model.Genre
+import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
+import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
+import com.salihakbas.movieappcompose.data.model.SeriesCast
+import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
+import com.salihakbas.movieappcompose.data.model.SeriesCrew
+import com.salihakbas.movieappcompose.data.model.TvShowResponse
 import com.salihakbas.movieappcompose.ui.components.CircleBackgroundIcon
 import com.salihakbas.movieappcompose.ui.components.EmptyScreen
 import com.salihakbas.movieappcompose.ui.components.LoadingBar
@@ -50,159 +66,412 @@ fun DetailScreen(
     onAction: (UiAction) -> Unit,
     navigateBack: () -> Unit
 ) {
+    uiEffect.collectWithLifecycle {
+        when (it) {
+            is UiEffect.NavigateBack -> navigateBack()
+        }
+    }
     when {
         uiState.isLoading -> LoadingBar()
-        uiState.list.isNotEmpty() -> EmptyScreen()
-        else -> DetailContent(
-            uiState = uiState,
-            navigateBack = navigateBack
-        )
+        uiState.movie != null -> {
+            MovieDetailContent(movie = uiState.movie, uiState.movieCredit,navigateBack)
+        }
+
+        uiState.series != null -> {
+            SeriesDetailContent(series = uiState.series,uiState.seriesCredit,navigateBack)
+        }
+
+        else -> {
+            EmptyScreen()
+        }
     }
 }
 
 @Composable
-fun DetailContent(
-    uiState: UiState,
-    navigateBack: () -> Unit
-) {
-    val movie = uiState.movie
-    val scrollState = rememberScrollState()
+fun MovieDetailContent(movie: MovieDetailResponse, credits: MovieCreditsResponse?,navigateBack: () -> Unit) {
+    val runtimeInMinutes = movie.runtime
+    val hours = runtimeInMinutes / 60
+    val minutes = runtimeInMinutes % 60
+    val formattedRuntime = "${if (hours > 0) "${hours}h " else ""}${minutes}min"
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = colorResource(R.color.main_blue_bg))
-            .verticalScroll(scrollState),
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        TopBar(navigateBack = navigateBack)
-        Spacer(modifier = Modifier.height(8.dp))
-        movie?.poster_path?.let {
-            AsyncImage(
-                model = "https://image.tmdb.org/t/p/w500$it",
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .fillMaxWidth()
-                    .height(450.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.FillBounds
-            )
-        }
-        Column(
+        TopBar(navigateBack)
+        AsyncImage(
+            model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+            contentDescription = movie.title,
             modifier = Modifier
-                .padding(16.dp)
-                .background(color = colorResource(R.color.main_blue_bg))
+                .fillMaxWidth()
+                .height(400.dp)
+                .clip(RoundedCornerShape(12.dp)),
+            contentScale = ContentScale.FillBounds
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = (uiState.movie?.title ?: "") + "(${
-                    uiState.movie?.release_date?.substring(
-                        0,
-                        4
-                    )
-                })",
-                fontSize = 24.sp,
+                text = movie.title,
+                color = Color.White,
+                fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                modifier = Modifier.weight(1f,false)
             )
             Text(
-                text = uiState.movie?.runtime?.let { minutes ->
-                    val hours = minutes / 60
-                    val remainingMinutes = minutes % 60
-                    "${hours}h ${remainingMinutes}m"
-                } ?: "Unknown",
-                fontSize = 16.sp,
-                color = Color.White
+                text = "(${movie.release_date.substring(0, 4)})",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 8.dp)
             )
-            Text(
-                text = uiState.movie?.genres?.joinToString { it.name } ?: "Unknown",
-                fontSize = 16.sp,
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider()
-            OutlinedButton(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(R.color.main_orange)
-                )
-            ) {
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
                 Text(
-                    text = "Play Movie",
-                    color = Color.Black,
-                    fontSize = 18.sp
+                    text = formattedRuntime,
+                    color = Color.White,
+                    fontSize = 16.sp,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                GenreRow(movie.genres)
+            }
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_star),
+                    contentDescription = null,
+                    tint = colorResource(R.color.main_orange),
+                    modifier = Modifier.size(100.dp)
+                )
+                Text(
+                    text = String.format("%.1f", movie.vote_average),
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = uiState.movie?.overview ?: "",
-                fontSize = 16.sp,
-                color = Color.White
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        HorizontalDivider()
+        Button(
+            onClick = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.main_orange)
             )
-            CompanySection(uiState.movie?.production_companies)
+        ) {
+            Text(text = "Play Movie", color = Color.Black, fontSize = 16.sp)
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = movie.overview,
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        credits?.cast?.let {
+            MovieCreditsSection(it, credits.crew)
         }
     }
 }
 
 @Composable
-fun TopBar(navigateBack: () -> Unit) {
+fun SeriesDetailContent(series: TvShowResponse, credits: SeriesCreditsResponse?,navigateBack: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = colorResource(R.color.main_blue_bg))
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        TopBar(navigateBack)
+        AsyncImage(
+            model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
+            contentDescription = series.name,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp)
+                .clip(RoundedCornerShape(12.dp)),
+            contentScale = ContentScale.FillBounds
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+
+            Text(
+                text = series.name ?: "Unknown Series",
+                color = Color.White,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "(${series.first_air_date?.substring(0, 4)})",
+                color = Color.Gray,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            GenreRow(series.genres)
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_star),
+                    contentDescription = null,
+                    tint = colorResource(R.color.main_orange),
+                    modifier = Modifier.size(100.dp)
+                )
+                Text(
+                    text = String.format("%.1f", series.vote_average),
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        HorizontalDivider()
+        Button(
+            onClick = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.main_orange)
+            )
+        ) {
+            Text(text = "Play Trailer", color = Color.Black, fontSize = 16.sp)
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = series.overview ?: "No overview available",
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        SeriesCreditsSection(credits?.cast ?: emptyList(), credits?.crew ?: emptyList())
+    }
+}
+
+@Composable
+fun TopBar(onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        CircleBackgroundIcon(onClick = navigateBack)
+        CircleBackgroundIcon(onClick = {onClick()})
         Icon(
             painter = painterResource(R.drawable.ic_bookmark),
             contentDescription = null,
             tint = colorResource(R.color.main_orange),
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(32.dp)
         )
     }
 }
 
 @Composable
-fun CompanySection(companies: List<ProductionCompany>?) {
-    Text(
-        text = "Product Companies",
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Bold,
-        color = Color.White,
-        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-    )
-
-    companies?.takeIf { it.isNotEmpty() }?.forEach { company ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            company.logo_path.let {
-                AsyncImage(
-                    model = "https://image.tmdb.org/t/p/w500$it",
-                    contentDescription = company.name,
+fun MovieCreditsSection(castList: List<Cast>, crewList: List<Crew>) {
+    Column {
+        Text(
+            text = "Cast",
+            fontSize = 20.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow {
+            items(castList) { cast ->
+                Column(
                     modifier = Modifier
-                        .size(80.dp)
-                        .padding(end = 8.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color.White.copy(alpha = 0.1f)),
-                    contentScale = ContentScale.Fit
+                        .width(100.dp)
+                        .padding(end = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w500${cast.profile_path}",
+                        contentDescription = cast.name,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = cast.name,
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center,
+                        maxLines = 2
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Directors",
+            fontSize = 20.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow {
+            items(crewList) { crew ->
+                Column(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(end = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w500${crew.profile_path}",
+                        contentDescription = crew.name,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = crew.name,
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center,
+                        maxLines = 2
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SeriesCreditsSection(castList: List<SeriesCast>, crewList: List<SeriesCrew>) {
+    Column {
+        Text(
+            text = "Cast",
+            fontSize = 20.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow {
+            items(castList) { cast ->
+                Column(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(end = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w500${cast.profile_path}",
+                        contentDescription = cast.name,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    cast.name?.let {
+                        Text(
+                            text = it,
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            maxLines = 2
+                        )
+                    }
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Directors",
+            fontSize = 20.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow {
+            items(crewList) { crew ->
+                Column(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(end = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w500${crew.profile_path}",
+                        contentDescription = crew.name,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    crew.name?.let {
+                        Text(
+                            text = it,
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            maxLines = 2
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun GenreRow(genres: List<Genre>) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        items(genres) { genre ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_dot),
+                    contentDescription = null,
+                    tint = colorResource(R.color.main_orange),
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = genre.name,
+                    color = Color.White,
+                    fontSize = 18.sp
                 )
             }
-            Text(
-                text = company.name,
-                fontSize = 16.sp,
-                color = Color.White
-            )
         }
-    } ?: Text(
-        text = "Bilinmiyor",
-        fontSize = 16.sp,
-        color = Color.White
-    )
+    }
 }
 
 @Preview(showBackground = true)
