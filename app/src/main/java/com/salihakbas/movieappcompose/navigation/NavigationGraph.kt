@@ -10,7 +10,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.salihakbas.movieappcompose.navigation.Screen.Detail
 import com.salihakbas.movieappcompose.navigation.Screen.Explore
 import com.salihakbas.movieappcompose.navigation.Screen.Favorite
 import com.salihakbas.movieappcompose.navigation.Screen.Home
@@ -116,14 +115,20 @@ fun NavigationGraph(
                 uiState = uiState,
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
-                navigateToDetail = { movieId ->
-                    navController.navigate("${Screen.getRoute(Detail(0))}/$movieId")
+                navigateToMovieDetail = { movieId ->
+                    navController.navigate("detail/movie/$movieId")
+                },
+                navigateToSeriesDetail = { seriesId ->
+                    navController.navigate("detail/series/$seriesId")
                 }
             )
         }
         composable(
-            route = "${Screen.getRoute(Detail(0))}/{movieId}",
-            arguments = listOf(navArgument("movieId") { type = NavType.IntType })
+            route = "detail/{type}/{id}",
+            arguments = listOf(
+                navArgument("type") { type = NavType.StringType },
+                navArgument("id") { type = NavType.IntType }
+            )
         ) {
             val viewModel: DetailViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -193,7 +198,8 @@ fun NavigationGraph(
                 uiState = uiState,
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
-                navigateToSubscribe = { navController.navigate(Subscribe) }
+                navigateToSubscribe = { navController.navigate(Subscribe) },
+                navigateToEditProfile = { navController.navigate(SignUp) }
             )
         }
         composable<Subscribe> {
