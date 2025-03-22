@@ -10,5 +10,6 @@ object ProfileContract {
 
     sealed class UiEffect {
         data object NavigateToSubscribe : UiEffect()
+        data object NavigateToEditProfile: UiEffect()
     }
 }

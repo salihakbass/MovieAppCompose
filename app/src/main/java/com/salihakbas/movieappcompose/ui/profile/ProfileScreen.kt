@@ -50,28 +50,34 @@ fun ProfileScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
-    navigateToSubscribe: () -> Unit
+    navigateToSubscribe: () -> Unit,
+    navigateToEditProfile: () -> Unit
 ) {
     uiEffect.collectWithLifecycle {
         when (it) {
             UiEffect.NavigateToSubscribe -> {
                 navigateToSubscribe()
             }
+
+            UiEffect.NavigateToEditProfile -> {
+                navigateToEditProfile()
+            }
         }
     }
-
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
         else -> ProfileContent(
-            navigateToSubscribe
+            navigateToSubscribe,
+            navigateToEditProfile
         )
     }
 }
 
 @Composable
 fun ProfileContent(
-    navigateToSubscribe: () -> Unit
+    navigateToSubscribe: () -> Unit,
+    navigateToEditProfile: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -112,7 +118,7 @@ fun ProfileContent(
                 )
                 ProfileStats()
                 OutlinedButton(
-                    onClick = {},
+                    onClick = { navigateToEditProfile() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
@@ -286,6 +292,7 @@ fun ProfileScreenPreview(
         uiState = uiState,
         uiEffect = emptyFlow(),
         onAction = {},
-        navigateToSubscribe = {}
+        navigateToSubscribe = {},
+        navigateToEditProfile = {}
     )
 }
