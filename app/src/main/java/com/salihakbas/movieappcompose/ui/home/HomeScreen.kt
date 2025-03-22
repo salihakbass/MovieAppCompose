@@ -61,14 +61,16 @@ fun HomeScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
-    navigateToDetail: (Int) -> Unit
+    navigateToMovieDetail: (Int) -> Unit,
+    navigateToSeriesDetail: (Int) -> Unit
 ) {
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
         else -> HomeContent(
             uiState = uiState,
-            navigateToDetail
+            navigateToMovieDetail,
+            navigateToSeriesDetail
         )
     }
 }
@@ -76,7 +78,8 @@ fun HomeScreen(
 @Composable
 fun HomeContent(
     uiState: UiState,
-    navigateToDetail: (Int) -> Unit
+    navigateToDetail: (Int) -> Unit,
+    navigateToSeriesDetail: (Int) -> Unit
 ) {
     val upcomingMovies = uiState.upcomingMovieList.take(6)
     val airingTodaySeries = uiState.airingTodayTvSeriesList.take(6)
@@ -109,7 +112,12 @@ fun HomeContent(
             Spacer(modifier = Modifier.height(24.dp))
             when (selectedTabIndex) {
                 0 -> MovieSection(uiState, pagerStateMovies, upcomingMovies, navigateToDetail)
-                1 -> SeriesSection(uiState, pagerStateSeries, airingTodaySeries)
+                1 -> SeriesSection(
+                    uiState,
+                    pagerStateSeries,
+                    airingTodaySeries,
+                    navigateToSeriesDetail
+                )
             }
         }
     }
@@ -119,7 +127,8 @@ fun HomeContent(
 fun SeriesSection(
     uiState: UiState,
     pagerState: PagerState,
-    airingTodaySeries: List<Series>
+    airingTodaySeries: List<Series>,
+    navigateToSeriesDetail: (Int) -> Unit
 ) {
     Column {
         Text(
@@ -144,7 +153,7 @@ fun SeriesSection(
                         .fillMaxWidth()
                         .height(300.dp)
                 ) { page ->
-                    SeriesImageItem(airingTodaySeries[page])
+                    SeriesImageItem(airingTodaySeries[page], navigateToSeriesDetail)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -166,7 +175,7 @@ fun SeriesSection(
             modifier = Modifier.fillMaxWidth(),
         ) {
             items(uiState.onTheAirSeriesList.shuffled()) { series ->
-                SeriesItem(series)
+                SeriesItem(series, navigateToSeriesDetail)
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -181,7 +190,7 @@ fun SeriesSection(
             modifier = Modifier.fillMaxWidth(),
         ) {
             items(uiState.popularSeriesList.shuffled()) { series ->
-                SeriesItem(series)
+                SeriesItem(series, navigateToSeriesDetail)
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -196,7 +205,7 @@ fun SeriesSection(
             modifier = Modifier.fillMaxWidth(),
         ) {
             items(uiState.topRatedSeriesList.shuffled()) { series ->
-                SeriesItem(series)
+                SeriesItem(series, navigateToSeriesDetail)
             }
         }
     }
@@ -204,7 +213,8 @@ fun SeriesSection(
 
 @Composable
 fun SeriesItem(
-    series: Series
+    series: Series,
+    navigateToSeriesDetail: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -212,6 +222,9 @@ fun SeriesItem(
                 vertical = 8.dp,
                 horizontal = 4.dp
             )
+            .clickable {
+                navigateToSeriesDetail(series.id)
+            }
     ) {
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
@@ -273,14 +286,18 @@ fun MovieImageItem(
 
 @Composable
 fun SeriesImageItem(
-    series: Series
+    series: Series,
+    navigateToSeriesDetail: (Int) -> Unit
 ) {
     AsyncImage(
         model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
         contentDescription = series.name,
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp)),
+            .clip(RoundedCornerShape(16.dp))
+            .clickable {
+                navigateToSeriesDetail(series.id)
+            },
         contentScale = ContentScale.FillBounds
     )
 }
@@ -468,6 +485,7 @@ fun HomeScreenPreview(
         uiState = uiState,
         uiEffect = emptyFlow(),
         onAction = {},
-        navigateToDetail = {}
+        navigateToMovieDetail = {},
+        navigateToSeriesDetail = {}
     )
 }

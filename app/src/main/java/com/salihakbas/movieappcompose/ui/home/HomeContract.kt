@@ -14,12 +14,14 @@ object HomeContract {
         val airingTodayTvSeriesList: List<Series> = emptyList(),
         val onTheAirSeriesList: List<Series> = emptyList(),
         val popularSeriesList: List<Series> = emptyList(),
-        val topRatedSeriesList: List<Series> = emptyList(),
+        val topRatedSeriesList: List<Series> = emptyList()
     )
 
     sealed class UiAction
 
     sealed class UiEffect {
-        data class NavigateToDetail(val movieId: Int) : UiEffect()
+        data class NavigateToMovieDetail(val movieId: Int) : UiEffect()
+        data class NavigateToSeriesDetail(val seriesId: Int) : UiEffect()
+
     }
 }
