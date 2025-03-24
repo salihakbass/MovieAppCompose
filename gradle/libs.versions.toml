@@ -2,6 +2,7 @@
 accompanistPager = "0.31.1-alpha"
 accompanistSystemuicontroller = "0.30.1"
 agp = "8.5.2"
+core = "12.1.0"
 kotlin = "2.1.10"
 core-ktx = "1.15.0"
 junit = "4.13.2"
@@ -31,6 +32,7 @@ googleid = "1.1.1"
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
+core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "core" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junit-ext" }

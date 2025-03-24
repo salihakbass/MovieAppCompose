@@ -109,6 +109,8 @@ dependencies {
     implementation (libs.accompanist.pager)
     implementation (libs.accompanist.systemuicontroller)
 
+    implementation (libs.core)
+
 }
 
 detekt {
