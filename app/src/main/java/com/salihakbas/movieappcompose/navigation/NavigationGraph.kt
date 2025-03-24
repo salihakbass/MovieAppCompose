@@ -22,7 +22,6 @@ import com.salihakbas.movieappcompose.navigation.Screen.SignIn
 import com.salihakbas.movieappcompose.navigation.Screen.SignUp
 import com.salihakbas.movieappcompose.navigation.Screen.Splash
 import com.salihakbas.movieappcompose.navigation.Screen.Subscribe
-import com.salihakbas.movieappcompose.navigation.Screen.Trailer
 import com.salihakbas.movieappcompose.ui.detail.DetailScreen
 import com.salihakbas.movieappcompose.ui.detail.DetailViewModel
 import com.salihakbas.movieappcompose.ui.explore.ExploreScreen
@@ -51,6 +50,9 @@ import com.salihakbas.movieappcompose.ui.subscribe.SubscribeScreen
 import com.salihakbas.movieappcompose.ui.subscribe.SubscribeViewModel
 import com.salihakbas.movieappcompose.ui.trailer.TrailerScreen
 import com.salihakbas.movieappcompose.ui.trailer.TrailerViewModel
+import okio.ByteString.Companion.encode
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun NavigationGraph(
@@ -133,21 +135,33 @@ fun NavigationGraph(
             val viewModel: DetailViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
+
             DetailScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
-                navigateBack = { navController.popBackStack() }
+                navigateBack = { navController.popBackStack() },
+                navigateToTrailer = { movieId ->
+                    navController.navigate("trailer/$movieId")
+                }
             )
         }
-        composable<Trailer> {
+        composable(
+            route = "trailer/{movieId}",
+            arguments = listOf(
+                navArgument("movieId") { type = NavType.IntType },
+            )
+        ) {
+
             val viewModel: TrailerViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
+
             TrailerScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                onBackClick = { navController.popBackStack() }
             )
         }
         composable<Notification> {
