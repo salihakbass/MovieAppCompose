@@ -1,7 +1,6 @@
 package com.salihakbas.movieappcompose.ui.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,21 +63,28 @@ fun DetailScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToTrailer: (Int) -> Unit
 ) {
     uiEffect.collectWithLifecycle {
         when (it) {
             is UiEffect.NavigateBack -> navigateBack()
+            is UiEffect.NavigateToTrailer -> navigateToTrailer(it.movieId)
         }
     }
     when {
         uiState.isLoading -> LoadingBar()
         uiState.movie != null -> {
-            MovieDetailContent(movie = uiState.movie, uiState.movieCredit,navigateBack)
+            MovieDetailContent(
+                movie = uiState.movie,
+                uiState.movieCredit,
+                navigateBack,
+                navigateToTrailer
+            )
         }
 
         uiState.series != null -> {
-            SeriesDetailContent(series = uiState.series,uiState.seriesCredit,navigateBack)
+            SeriesDetailContent(series = uiState.series, uiState.seriesCredit, navigateBack)
         }
 
         else -> {
@@ -88,7 +94,12 @@ fun DetailScreen(
 }
 
 @Composable
-fun MovieDetailContent(movie: MovieDetailResponse, credits: MovieCreditsResponse?,navigateBack: () -> Unit) {
+fun MovieDetailContent(
+    movie: MovieDetailResponse,
+    credits: MovieCreditsResponse?,
+    navigateBack: () -> Unit,
+    navigateToTrailer: (Int) -> Unit
+) {
     val runtimeInMinutes = movie.runtime
     val hours = runtimeInMinutes / 60
     val minutes = runtimeInMinutes % 60
@@ -119,7 +130,7 @@ fun MovieDetailContent(movie: MovieDetailResponse, credits: MovieCreditsResponse
                 color = Color.White,
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f,false)
+                modifier = Modifier.weight(1f, false)
             )
             Text(
                 text = "(${movie.release_date.substring(0, 4)})",
@@ -164,7 +175,7 @@ fun MovieDetailContent(movie: MovieDetailResponse, credits: MovieCreditsResponse
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider()
         Button(
-            onClick = {},
+            onClick = { navigateToTrailer(movie.id) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
@@ -187,7 +198,11 @@ fun MovieDetailContent(movie: MovieDetailResponse, credits: MovieCreditsResponse
 }
 
 @Composable
-fun SeriesDetailContent(series: TvShowResponse, credits: SeriesCreditsResponse?,navigateBack: () -> Unit) {
+fun SeriesDetailContent(
+    series: TvShowResponse,
+    credits: SeriesCreditsResponse?,
+    navigateBack: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -285,7 +300,7 @@ fun TopBar(onClick: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CircleBackgroundIcon(onClick = {onClick()})
+        CircleBackgroundIcon(onClick = { onClick() })
         Icon(
             painter = painterResource(R.drawable.ic_bookmark),
             contentDescription = null,
@@ -483,6 +498,7 @@ fun DetailScreenPreview(
         uiState = uiState,
         uiEffect = emptyFlow(),
         onAction = {},
-        navigateBack = {}
+        navigateBack = {},
+        navigateToTrailer = {}
     )
 }

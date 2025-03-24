@@ -22,5 +22,6 @@ object DetailContract {
 
     sealed class UiEffect {
         data object NavigateBack : UiEffect()
+        data class NavigateToTrailer(val movieId: Int) : UiEffect()
     }
 }
