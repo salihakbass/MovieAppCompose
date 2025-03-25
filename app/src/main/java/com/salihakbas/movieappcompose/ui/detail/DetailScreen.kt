@@ -2,7 +2,6 @@ package com.salihakbas.movieappcompose.ui.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -152,25 +151,27 @@ fun MovieDetailContent(
                     fontSize = 16.sp,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_star),
+                        contentDescription = null,
+                        tint = colorResource(R.color.main_orange),
+                        modifier = Modifier.size(28.dp)
+                    )
+                    Text(
+                        text = String.format("%.1f", movie.vote_average),
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
                 GenreRow(movie.genres)
             }
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_star),
-                    contentDescription = null,
-                    tint = colorResource(R.color.main_orange),
-                    modifier = Modifier.size(100.dp)
-                )
-                Text(
-                    text = String.format("%.1f", movie.vote_average),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+
+
         }
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider()
@@ -183,7 +184,7 @@ fun MovieDetailContent(
                 containerColor = colorResource(R.color.main_orange)
             )
         ) {
-            Text(text = "Play Movie", color = Color.Black, fontSize = 16.sp)
+            Text(text = "Play Trailer", color = Color.Black, fontSize = 16.sp)
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
@@ -220,12 +221,11 @@ fun SeriesDetailContent(
                 .clip(RoundedCornerShape(12.dp)),
             contentScale = ContentScale.FillBounds
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-
             Text(
                 text = series.name ?: "Unknown Series",
                 color = Color.White,
@@ -240,30 +240,26 @@ fun SeriesDetailContent(
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            GenreRow(series.genres)
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_star),
-                    contentDescription = null,
-                    tint = colorResource(R.color.main_orange),
-                    modifier = Modifier.size(100.dp)
-                )
-                Text(
-                    text = String.format("%.1f", series.vote_average),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+            Icon(
+                painter = painterResource(R.drawable.ic_star),
+                contentDescription = null,
+                tint = colorResource(R.color.main_orange),
+                modifier = Modifier.size(28.dp)
+            )
+            Text(
+                text = String.format("%.1f", series.vote_average),
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        GenreRow(series.genres)
+
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider()
         Button(
@@ -277,8 +273,6 @@ fun SeriesDetailContent(
         ) {
             Text(text = "Play Trailer", color = Color.Black, fontSize = 16.sp)
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -468,7 +462,7 @@ fun SeriesCreditsSection(castList: List<SeriesCast>, crewList: List<SeriesCrew>)
 fun GenreRow(genres: List<Genre>) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         items(genres) { genre ->
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -476,13 +470,13 @@ fun GenreRow(genres: List<Genre>) {
                     painter = painterResource(id = R.drawable.ic_dot),
                     contentDescription = null,
                     tint = colorResource(R.color.main_orange),
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(12.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = genre.name,
                     color = Color.White,
-                    fontSize = 18.sp
+                    fontSize = 16.sp
                 )
             }
         }
