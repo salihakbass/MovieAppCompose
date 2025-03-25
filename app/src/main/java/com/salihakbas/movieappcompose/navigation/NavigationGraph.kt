@@ -1,8 +1,11 @@
 package com.salihakbas.movieappcompose.navigation
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -22,6 +25,7 @@ import com.salihakbas.movieappcompose.navigation.Screen.SignIn
 import com.salihakbas.movieappcompose.navigation.Screen.SignUp
 import com.salihakbas.movieappcompose.navigation.Screen.Splash
 import com.salihakbas.movieappcompose.navigation.Screen.Subscribe
+import com.salihakbas.movieappcompose.ui.components.LocalActivity
 import com.salihakbas.movieappcompose.ui.detail.DetailScreen
 import com.salihakbas.movieappcompose.ui.detail.DetailViewModel
 import com.salihakbas.movieappcompose.ui.explore.ExploreScreen
@@ -152,17 +156,21 @@ fun NavigationGraph(
                 navArgument("movieId") { type = NavType.IntType },
             )
         ) {
-
+            val context = LocalContext.current
+            val activity = (context as? Activity) ?: throw IllegalStateException("Activity not found")
             val viewModel: TrailerViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
 
-            TrailerScreen(
-                uiState = uiState,
-                uiEffect = uiEffect,
-                onAction = viewModel::onAction,
-                onBackClick = { navController.popBackStack() }
-            )
+            CompositionLocalProvider(LocalActivity provides activity) {
+                TrailerScreen(
+                    uiState = uiState,
+                    uiEffect = uiEffect,
+                    onAction = viewModel::onAction,
+                    onBackClick = { navController.popBackStack() }
+                )
+            }
+
         }
         composable<Notification> {
             val viewModel: NotificationViewModel = hiltViewModel()

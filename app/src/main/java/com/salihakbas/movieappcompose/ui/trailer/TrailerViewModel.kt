@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.salihakbas.movieappcompose.domain.usecase.movie.GetMovieDetailUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetMovieTrailerUseCase
 import com.salihakbas.movieappcompose.ui.trailer.TrailerContract.UiAction
 import com.salihakbas.movieappcompose.ui.trailer.TrailerContract.UiEffect
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TrailerViewModel @Inject constructor(
     private val getMovieTrailerUseCase: GetMovieTrailerUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val getMovieDetailUseCase: GetMovieDetailUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -35,6 +37,7 @@ class TrailerViewModel @Inject constructor(
         val movieId = savedStateHandle.get<Int>("movieId")
         movieId?.let {
             getMovieTrailer(it)
+            getMovieDetail(it)
         }
     }
 
@@ -58,6 +61,20 @@ class TrailerViewModel @Inject constructor(
 
             updateUiState {
                 copy(isLoading = false, videoKey = trailerKey)
+            }
+        } catch (e: Exception) {
+            updateUiState { copy(isLoading = false) }
+            emitUiEffect(UiEffect.Error(e))
+        }
+    }
+
+    private fun getMovieDetail(movieId: Int) = viewModelScope.launch {
+        updateUiState { copy(isLoading = true) }
+
+        try {
+            val response = getMovieDetailUseCase(movieId)
+            updateUiState {
+                copy(isLoading = false, movie = response)
             }
         } catch (e: Exception) {
             updateUiState { copy(isLoading = false) }

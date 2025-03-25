@@ -1,10 +1,13 @@
 package com.salihakbas.movieappcompose.ui.trailer
 
+import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
+
 object TrailerContract {
     data class UiState(
         val isLoading: Boolean = false,
         val list: List<String> = emptyList(),
-        val videoKey: String? = null
+        val videoKey: String? = null,
+        val movie: MovieDetailResponse? = null
     )
 
     sealed class UiAction {
