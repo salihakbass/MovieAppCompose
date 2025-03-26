@@ -45,6 +45,9 @@ sealed interface Screen {
     @Serializable
     data object Payment : Screen
 
+    @Serializable
+    data class PersonDetail(val personId: Int) : Screen
+
     companion object {
         fun getRoute(screen: Screen): String = screen::class.qualifiedName.orEmpty()
 

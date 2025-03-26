@@ -40,6 +40,8 @@ import com.salihakbas.movieappcompose.ui.onboarding.OnboardingScreen
 import com.salihakbas.movieappcompose.ui.onboarding.OnboardingViewModel
 import com.salihakbas.movieappcompose.ui.payment.PaymentScreen
 import com.salihakbas.movieappcompose.ui.payment.PaymentViewModel
+import com.salihakbas.movieappcompose.ui.person.PersonDetailScreen
+import com.salihakbas.movieappcompose.ui.person.PersonDetailViewModel
 import com.salihakbas.movieappcompose.ui.profile.ProfileScreen
 import com.salihakbas.movieappcompose.ui.profile.ProfileViewModel
 import com.salihakbas.movieappcompose.ui.search.SearchScreen
@@ -54,9 +56,6 @@ import com.salihakbas.movieappcompose.ui.subscribe.SubscribeScreen
 import com.salihakbas.movieappcompose.ui.subscribe.SubscribeViewModel
 import com.salihakbas.movieappcompose.ui.trailer.TrailerScreen
 import com.salihakbas.movieappcompose.ui.trailer.TrailerViewModel
-import okio.ByteString.Companion.encode
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun NavigationGraph(
@@ -147,6 +146,9 @@ fun NavigationGraph(
                 navigateBack = { navController.popBackStack() },
                 navigateToTrailer = { movieId ->
                     navController.navigate("trailer/$movieId")
+                },
+                navigateToPersonDetail = { personId ->
+                    navController.navigate("person_detail/$personId")
                 }
             )
         }
@@ -157,7 +159,8 @@ fun NavigationGraph(
             )
         ) {
             val context = LocalContext.current
-            val activity = (context as? Activity) ?: throw IllegalStateException("Activity not found")
+            val activity =
+                (context as? Activity) ?: throw IllegalStateException("Activity not found")
             val viewModel: TrailerViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
@@ -241,6 +244,23 @@ fun NavigationGraph(
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
             PaymentScreen(
+                uiState = uiState,
+                uiEffect = uiEffect,
+                onAction = viewModel::onAction,
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+        composable(
+            route = "person_detail/{personId}",
+            arguments = listOf(
+                navArgument("personId") { type = NavType.IntType }
+            )
+        ) {
+            val viewModel: PersonDetailViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
+
+            PersonDetailScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,

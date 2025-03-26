@@ -1,6 +1,7 @@
 package com.salihakbas.movieappcompose.ui.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,7 +64,8 @@ fun DetailScreen(
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
     navigateBack: () -> Unit,
-    navigateToTrailer: (Int) -> Unit
+    navigateToTrailer: (Int) -> Unit,
+    navigateToPersonDetail: (Int) -> Unit
 ) {
     uiEffect.collectWithLifecycle {
         when (it) {
@@ -78,7 +80,8 @@ fun DetailScreen(
                 movie = uiState.movie,
                 uiState.movieCredit,
                 navigateBack,
-                navigateToTrailer
+                navigateToTrailer,
+                navigateToPersonDetail
             )
         }
 
@@ -97,7 +100,8 @@ fun MovieDetailContent(
     movie: MovieDetailResponse,
     credits: MovieCreditsResponse?,
     navigateBack: () -> Unit,
-    navigateToTrailer: (Int) -> Unit
+    navigateToTrailer: (Int) -> Unit,
+    navigateToPersonDetail: (Int) -> Unit
 ) {
     val runtimeInMinutes = movie.runtime
     val hours = runtimeInMinutes / 60
@@ -193,7 +197,7 @@ fun MovieDetailContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         credits?.cast?.let {
-            MovieCreditsSection(it, credits.crew)
+            MovieCreditsSection(it, credits.crew, navigateToPersonDetail)
         }
     }
 }
@@ -305,7 +309,11 @@ fun TopBar(onClick: () -> Unit) {
 }
 
 @Composable
-fun MovieCreditsSection(castList: List<Cast>, crewList: List<Crew>) {
+fun MovieCreditsSection(
+    castList: List<Cast>,
+    crewList: List<Crew>,
+    navigateToPersonDetail: (Int) -> Unit
+) {
     Column {
         Text(
             text = "Cast",
@@ -327,7 +335,10 @@ fun MovieCreditsSection(castList: List<Cast>, crewList: List<Crew>) {
                         contentDescription = cast.name,
                         modifier = Modifier
                             .size(80.dp)
-                            .clip(CircleShape),
+                            .clip(CircleShape)
+                            .clickable {
+                                navigateToPersonDetail(cast.id)
+                            },
                         contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -493,6 +504,7 @@ fun DetailScreenPreview(
         uiEffect = emptyFlow(),
         onAction = {},
         navigateBack = {},
-        navigateToTrailer = {}
+        navigateToTrailer = {},
+        navigateToPersonDetail = {}
     )
 }
