@@ -2,6 +2,7 @@ package com.salihakbas.movieappcompose.ui.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.FirebaseDatabase
 import com.salihakbas.movieappcompose.common.Resource
 import com.salihakbas.movieappcompose.domain.repository.FirebaseAuthRepository
 import com.salihakbas.movieappcompose.ui.signup.SignUpContract.UiAction
@@ -58,6 +59,7 @@ class SignUpViewModel @Inject constructor(
 
         )) {
             is Resource.Success -> {
+                saveUserToRealtimeDatabase(result.data, uiState.value.nameSurname)
                 emitUiEffect(UiEffect.NavigateToSignIn)
             }
 
@@ -65,6 +67,18 @@ class SignUpViewModel @Inject constructor(
 
             }
         }
+    }
+
+    private fun saveUserToRealtimeDatabase(userId: String, name: String) {
+        val database = FirebaseDatabase.getInstance().reference
+        val userMap = mapOf(
+            "name" to name
+        )
+        database.child("users").child(userId).setValue(userMap)
+            .addOnSuccessListener {
+            }
+            .addOnFailureListener { e ->
+            }
     }
 
     private fun updateUiState(block: UiState.() -> UiState) {
