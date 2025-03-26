@@ -3,6 +3,7 @@ package com.salihakbas.movieappcompose.navigation
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -13,6 +14,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.google.firebase.auth.FirebaseAuth
 import com.salihakbas.movieappcompose.navigation.Screen.Explore
 import com.salihakbas.movieappcompose.navigation.Screen.Favorite
 import com.salihakbas.movieappcompose.navigation.Screen.Home
@@ -116,6 +118,7 @@ fun NavigationGraph(
             val viewModel: HomeViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
             HomeScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
@@ -127,6 +130,9 @@ fun NavigationGraph(
                     navController.navigate("detail/series/$seriesId")
                 }
             )
+            LaunchedEffect(key1 = userId) {
+                viewModel.fetchUserFromRealtimeDatabase(userId)
+            }
         }
         composable(
             route = "detail/{type}/{id}",
