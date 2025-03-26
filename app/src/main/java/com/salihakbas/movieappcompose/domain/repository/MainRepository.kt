@@ -4,6 +4,7 @@ import com.salihakbas.movieappcompose.data.model.Movie
 import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
 import com.salihakbas.movieappcompose.data.model.MovieTrailerResponse
+import com.salihakbas.movieappcompose.data.model.PersonDetailResponse
 import com.salihakbas.movieappcompose.data.model.Series
 import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
 import com.salihakbas.movieappcompose.data.model.TvShowResponse
@@ -83,5 +84,11 @@ interface MainRepository {
         movieId: Int,
         language: String = "en-US"
     ): MovieTrailerResponse
+
+    suspend fun getPersonDetail(
+        personId: Int,
+        language: String = "en-US",
+        appendToResponse: String? = null
+    ): PersonDetailResponse
 
 }

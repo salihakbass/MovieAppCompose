@@ -4,6 +4,7 @@ import com.salihakbas.movieappcompose.data.model.Movie
 import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
 import com.salihakbas.movieappcompose.data.model.MovieTrailerResponse
+import com.salihakbas.movieappcompose.data.model.PersonDetailResponse
 import com.salihakbas.movieappcompose.data.model.Series
 import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
 import com.salihakbas.movieappcompose.data.model.TvShowResponse
@@ -106,6 +107,14 @@ class MainRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieTrailer(movieId: Int, language: String): MovieTrailerResponse {
         return mainService.getMovieTrailer(movieId, language)
+    }
+
+    override suspend fun getPersonDetail(
+        personId: Int,
+        language: String,
+        appendToResponse: String?
+    ): PersonDetailResponse {
+        return mainService.getPersonDetail(personId, appendToResponse, language)
     }
 
 }

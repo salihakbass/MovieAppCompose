@@ -4,6 +4,7 @@ import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
 import com.salihakbas.movieappcompose.data.model.MovieResponse
 import com.salihakbas.movieappcompose.data.model.MovieTrailerResponse
+import com.salihakbas.movieappcompose.data.model.PersonDetailResponse
 import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
 import com.salihakbas.movieappcompose.data.model.SeriesResponse
 import com.salihakbas.movieappcompose.data.model.TvShowResponse
@@ -87,17 +88,24 @@ interface MainService {
         @Path("series_id") seriesId: Int,
         @Query("language") language: String = "en-US",
         @Query("append_to_response") appendToResponse: String? = null
-    ) : TvShowResponse
+    ): TvShowResponse
 
     @GET("tv/{series_id}/credits")
     suspend fun getSerieCredits(
         @Path("series_id") seriesId: Int,
         @Query("language") language: String = "en-US"
-    ) : SeriesCreditsResponse
+    ): SeriesCreditsResponse
 
     @GET("movie/{movie_id}/videos")
     suspend fun getMovieTrailer(
         @Path("movie_id") movieId: Int,
         @Query("language") language: String = "en-US"
-    ) : MovieTrailerResponse
+    ): MovieTrailerResponse
+
+    @GET("person/{person_id}")
+    suspend fun getPersonDetail(
+        @Path("person_id") personId: Int,
+        @Query("append_to_response") appendToResponse: String? = null,
+        @Query("language") language: String = "en-US"
+    ): PersonDetailResponse
 }
