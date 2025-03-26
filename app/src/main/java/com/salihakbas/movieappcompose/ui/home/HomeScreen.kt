@@ -100,7 +100,7 @@ fun HomeContent(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            TopBarHome()
+            TopBarHome(uiState = uiState)
             Spacer(modifier = Modifier.height(16.dp))
             HomeTabRow(
                 tabTitles = tabs,
@@ -445,7 +445,9 @@ fun MovieItem(
 }
 
 @Composable
-fun TopBarHome() {
+fun TopBarHome(
+    uiState: UiState
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -454,7 +456,7 @@ fun TopBarHome() {
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(
-                text = "Hello, Paulo",
+                text = "Hello, ${uiState.username}",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp

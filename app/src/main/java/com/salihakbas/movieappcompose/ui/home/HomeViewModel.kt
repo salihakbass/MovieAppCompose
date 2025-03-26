@@ -2,6 +2,8 @@ package com.salihakbas.movieappcompose.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.database.FirebaseDatabase
 import com.salihakbas.movieappcompose.domain.usecase.serie.GetAiringTodayTvSeriesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetNowPlayingMoviesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.serie.GetOnTheAirSeriesUseCase
@@ -143,6 +145,31 @@ class HomeViewModel @Inject constructor(
         }.onFailure {
 
         }
+    }
+
+    fun fetchUserFromRealtimeDatabase(userId: String) {
+        updateUiState { copy(isLoading = true) }
+
+        val database = FirebaseDatabase.getInstance().reference
+        database.child("users").child(userId).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    val name = snapshot.child("name").getValue(String::class.java) ?: ""
+                    val surname = snapshot.child("surname").getValue(String::class.java) ?: ""
+
+                    updateUiState {
+                        copy(
+                            isLoading = false,
+                            username = name
+                        )
+                    }
+                } else {
+                    updateUiState { copy(isLoading = false) }
+                }
+            }
+            .addOnFailureListener { e ->
+                updateUiState { copy(isLoading = false) }
+            }
     }
 
 
