@@ -86,7 +86,7 @@ fun DetailScreen(
         }
 
         uiState.series != null -> {
-            SeriesDetailContent(series = uiState.series, uiState.seriesCredit, navigateBack)
+            SeriesDetailContent(series = uiState.series, uiState.seriesCredit, navigateBack,navigateToPersonDetail)
         }
 
         else -> {
@@ -206,7 +206,8 @@ fun MovieDetailContent(
 fun SeriesDetailContent(
     series: TvShowResponse,
     credits: SeriesCreditsResponse?,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToPersonDetail: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -222,7 +223,8 @@ fun SeriesDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
-                .clip(RoundedCornerShape(12.dp)),
+                .clip(RoundedCornerShape(12.dp))
+            ,
             contentScale = ContentScale.FillBounds
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -285,7 +287,7 @@ fun SeriesDetailContent(
             color = Color.White
         )
         Spacer(modifier = Modifier.height(8.dp))
-        SeriesCreditsSection(credits?.cast ?: emptyList(), credits?.crew ?: emptyList())
+        SeriesCreditsSection(credits?.cast ?: emptyList(), credits?.crew ?: emptyList(), navigateToPersonDetail)
     }
 }
 
@@ -373,7 +375,10 @@ fun MovieCreditsSection(
                         contentDescription = crew.name,
                         modifier = Modifier
                             .size(80.dp)
-                            .clip(CircleShape),
+                            .clip(CircleShape)
+                            .clickable {
+                                navigateToPersonDetail(crew.id)
+                            },
                         contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -391,7 +396,7 @@ fun MovieCreditsSection(
 }
 
 @Composable
-fun SeriesCreditsSection(castList: List<SeriesCast>, crewList: List<SeriesCrew>) {
+fun SeriesCreditsSection(castList: List<SeriesCast>, crewList: List<SeriesCrew>,navigateToPersonDetail: (Int) -> Unit) {
     Column {
         Text(
             text = "Cast",
@@ -413,7 +418,10 @@ fun SeriesCreditsSection(castList: List<SeriesCast>, crewList: List<SeriesCrew>)
                         contentDescription = cast.name,
                         modifier = Modifier
                             .size(80.dp)
-                            .clip(CircleShape),
+                            .clip(CircleShape)
+                            .clickable {
+                                navigateToPersonDetail(cast.id)
+                            },
                         contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -450,7 +458,10 @@ fun SeriesCreditsSection(castList: List<SeriesCast>, crewList: List<SeriesCrew>)
                         contentDescription = crew.name,
                         modifier = Modifier
                             .size(80.dp)
-                            .clip(CircleShape),
+                            .clip(CircleShape)
+                            .clickable {
+                                navigateToPersonDetail(crew.id)
+                            },
                         contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(4.dp))
