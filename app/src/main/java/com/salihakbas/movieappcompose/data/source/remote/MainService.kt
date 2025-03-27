@@ -108,4 +108,18 @@ interface MainService {
         @Query("append_to_response") appendToResponse: String? = null,
         @Query("language") language: String = "en-US"
     ): PersonDetailResponse
+
+    @GET("movie/{movie_id}/similar")
+    suspend fun getSimilarMovies(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): MovieResponse
+
+    @GET("tv/{series_id}/similar")
+    suspend fun getSimilarSeries(
+        @Path("series_id") seriesId: Int,
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): SeriesResponse
 }

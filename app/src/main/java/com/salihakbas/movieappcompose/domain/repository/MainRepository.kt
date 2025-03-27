@@ -91,4 +91,16 @@ interface MainRepository {
         appendToResponse: String? = null
     ): PersonDetailResponse
 
+    suspend fun getSimilarMovies(
+        movieId: Int,
+        language: String = "en-US",
+        page: Int = 1
+    ): List<Movie>
+
+    suspend fun getSimilarSeries(
+        seriesId: Int,
+        language: String = "en-US",
+        page: Int = 1
+    ): List<Series>
+
 }

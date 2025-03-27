@@ -117,4 +117,17 @@ class MainRepositoryImpl @Inject constructor(
         return mainService.getPersonDetail(personId, appendToResponse, language)
     }
 
+    override suspend fun getSimilarMovies(movieId: Int, language: String, page: Int): List<Movie> {
+        return mainService.getSimilarMovies(movieId, language, page).results
+    }
+
+    override suspend fun getSimilarSeries(
+        seriesId: Int,
+        language: String,
+        page: Int
+    ): List<Series> {
+        return mainService.getSimilarSeries(seriesId, language, page).results
+    }
+
+
 }
