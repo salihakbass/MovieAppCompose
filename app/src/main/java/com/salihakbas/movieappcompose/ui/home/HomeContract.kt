@@ -14,7 +14,8 @@ object HomeContract {
         val airingTodayTvSeriesList: List<Series> = emptyList(),
         val onTheAirSeriesList: List<Series> = emptyList(),
         val popularSeriesList: List<Series> = emptyList(),
-        val topRatedSeriesList: List<Series> = emptyList()
+        val topRatedSeriesList: List<Series> = emptyList(),
+        val username : String = ""
     )
 
     sealed class UiAction
