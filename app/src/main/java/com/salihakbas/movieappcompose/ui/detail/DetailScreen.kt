@@ -87,7 +87,8 @@ fun DetailScreen(
                 navigateToTrailer,
                 navigateToPersonDetail,
                 uiState,
-                navigateToMovieDetail
+                navigateToMovieDetail,
+                onAction
             )
         }
 
@@ -98,7 +99,8 @@ fun DetailScreen(
                 navigateBack,
                 navigateToPersonDetail,
                 uiState,
-                navigateToSeriesDetail
+                navigateToSeriesDetail,
+                onAction
             )
         }
 
@@ -116,7 +118,8 @@ fun MovieDetailContent(
     navigateToTrailer: (Int) -> Unit,
     navigateToPersonDetail: (Int) -> Unit,
     uiState: UiState,
-    navigateToMovieDetail: (Int) -> Unit
+    navigateToMovieDetail: (Int) -> Unit,
+    onAction: (UiAction) -> Unit
 ) {
     val runtimeInMinutes = movie.runtime
     val hours = runtimeInMinutes / 60
@@ -129,7 +132,7 @@ fun MovieDetailContent(
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        TopBar(navigateBack)
+        TopBar(navigateBack, onAction, uiState)
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
             contentDescription = movie.title,
@@ -240,7 +243,8 @@ fun SeriesDetailContent(
     navigateBack: () -> Unit,
     navigateToPersonDetail: (Int) -> Unit,
     uiState: UiState,
-    navigateToSeriesDetail: (Int) -> Unit
+    navigateToSeriesDetail: (Int) -> Unit,
+    onAction: (UiAction) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -249,7 +253,7 @@ fun SeriesDetailContent(
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        TopBar(navigateBack)
+        TopBar(navigateBack, onAction, uiState)
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
             contentDescription = series.name,
@@ -344,7 +348,11 @@ fun SeriesDetailContent(
 }
 
 @Composable
-fun TopBar(onClick: () -> Unit) {
+fun TopBar(
+    onClick: () -> Unit,
+    onAction: (UiAction) -> Unit,
+    uiState: UiState
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -356,8 +364,16 @@ fun TopBar(onClick: () -> Unit) {
         Icon(
             painter = painterResource(R.drawable.ic_bookmark),
             contentDescription = null,
-            tint = colorResource(R.color.main_orange),
-            modifier = Modifier.size(32.dp)
+            tint = if (uiState.isFavorite) {
+                colorResource(R.color.main_orange)
+            } else {
+                Color.White
+            },
+            modifier = Modifier
+                .size(32.dp)
+                .clickable {
+                    onAction(UiAction.ToggleFavorite)
+                }
         )
     }
 }

@@ -3,6 +3,9 @@ package com.salihakbas.movieappcompose.ui.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.salihakbas.movieappcompose.data.model.FavoriteEntity
+import com.salihakbas.movieappcompose.data.model.toFavoriteEntity
+import com.salihakbas.movieappcompose.domain.repository.FavoriteRepository
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetMovieCreditsUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetMovieDetailUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetSimilarMoviesUseCase
@@ -31,7 +34,8 @@ class DetailViewModel @Inject constructor(
     private val getSeriesDetailUseCase: GetSeriesDetailUseCase,
     private val getSeriesCreditsUseCase: GetSeriesCreditsUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
-    private val getSimilarSeriesUseCase: GetSimilarSeriesUseCase
+    private val getSimilarSeriesUseCase: GetSimilarSeriesUseCase,
+    private val favoriteRepository: FavoriteRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -60,7 +64,16 @@ class DetailViewModel @Inject constructor(
     }
 
     fun onAction(uiAction: UiAction) {
-
+        when (uiAction) {
+            is UiAction.ToggleFavorite -> {
+                val movie = uiState.value.movie ?: return
+                if (uiState.value.isFavorite) {
+                    removeFromFavorites(movie.id)
+                } else {
+                    addToFavorites(movie.toFavoriteEntity())
+                }
+            }
+        }
     }
 
     private fun getMovieDetail(movieId: Int) = viewModelScope.launch {
@@ -68,6 +81,7 @@ class DetailViewModel @Inject constructor(
         try {
             val movieDetail = getMovieDetailUseCase(movieId)
             updateUiState { copy(isLoading = false, movie = movieDetail) }
+            checkIsFavorite(movieId)
         } catch (e: Exception) {
             updateUiState { copy(isLoading = false) }
         }
@@ -120,6 +134,23 @@ class DetailViewModel @Inject constructor(
             updateUiState { copy(isLoading = false) }
         }
     }
+
+    private fun addToFavorites(movie: FavoriteEntity) = viewModelScope.launch {
+        favoriteRepository.addFavorite(movie)
+    }
+
+    private fun removeFromFavorites(movieId: Int) = viewModelScope.launch {
+        favoriteRepository.removeFavorite(movieId)
+    }
+
+    private fun checkIsFavorite(id: Int) {
+        viewModelScope.launch {
+            favoriteRepository.isFavorite(id).collect { isFav ->
+                updateUiState { copy(isFavorite = isFav) }
+            }
+        }
+    }
+
 
     private fun updateUiState(block: UiState.() -> UiState) {
         _uiState.update(block)

@@ -18,10 +18,14 @@ object DetailContract {
         val genre: Genre? = null,
         val seriesCredit: SeriesCreditsResponse? = null,
         val similarMovies: List<Movie> = emptyList(),
-        val similarSeries: List<Series> = emptyList()
+        val similarSeries: List<Series> = emptyList(),
+        val favoriteMovie: Movie? = null,
+        val isFavorite: Boolean = false,
     )
 
-    sealed class UiAction
+    sealed class UiAction {
+        data object ToggleFavorite : UiAction()
+    }
 
 
     sealed class UiEffect {
