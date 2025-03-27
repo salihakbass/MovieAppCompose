@@ -46,6 +46,9 @@ sealed interface Screen {
     data object Payment : Screen
 
     @Serializable
+    data object EditProfile : Screen
+
+    @Serializable
     data class PersonDetail(val personId: Int) : Screen
 
     companion object {

@@ -30,6 +30,8 @@ import com.salihakbas.movieappcompose.navigation.Screen.Subscribe
 import com.salihakbas.movieappcompose.ui.components.LocalActivity
 import com.salihakbas.movieappcompose.ui.detail.DetailScreen
 import com.salihakbas.movieappcompose.ui.detail.DetailViewModel
+import com.salihakbas.movieappcompose.ui.editprofile.EditProfileScreen
+import com.salihakbas.movieappcompose.ui.editprofile.EditProfileViewModel
 import com.salihakbas.movieappcompose.ui.explore.ExploreScreen
 import com.salihakbas.movieappcompose.ui.explore.ExploreViewModel
 import com.salihakbas.movieappcompose.ui.favorite.FavoriteScreen
@@ -155,6 +157,12 @@ fun NavigationGraph(
                 },
                 navigateToPersonDetail = { personId ->
                     navController.navigate("person_detail/$personId")
+                },
+                navigateToMovieDetail = { movieId ->
+                    navController.navigate("detail/movie/$movieId")
+                },
+                navigateToSeriesDetail = { seriesId ->
+                    navController.navigate("detail/series/$seriesId")
                 }
             )
         }
@@ -230,7 +238,7 @@ fun NavigationGraph(
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
                 navigateToSubscribe = { navController.navigate(Subscribe) },
-                navigateToEditProfile = { navController.navigate(SignUp) }
+                navigateToEditProfile = { navController.navigate(Screen.EditProfile) }
             )
         }
         composable<Subscribe> {
@@ -271,6 +279,17 @@ fun NavigationGraph(
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
                 navigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.EditProfile> {
+            val viewModel: EditProfileViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
+            EditProfileScreen(
+                uiState = uiState,
+                uiEffect = uiEffect,
+                onAction = viewModel::onAction
             )
         }
     }
