@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetMovieCreditsUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetMovieDetailUseCase
+import com.salihakbas.movieappcompose.domain.usecase.movie.GetSimilarMoviesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.serie.GetSeriesCreditsUseCase
 import com.salihakbas.movieappcompose.domain.usecase.serie.GetSeriesDetailUseCase
+import com.salihakbas.movieappcompose.domain.usecase.serie.GetSimilarSeriesUseCase
 import com.salihakbas.movieappcompose.ui.detail.DetailContract.UiAction
 import com.salihakbas.movieappcompose.ui.detail.DetailContract.UiEffect
 import com.salihakbas.movieappcompose.ui.detail.DetailContract.UiState
@@ -27,7 +29,9 @@ class DetailViewModel @Inject constructor(
     private val getMovieDetailUseCase: GetMovieDetailUseCase,
     private val getMovieCreditsUseCase: GetMovieCreditsUseCase,
     private val getSeriesDetailUseCase: GetSeriesDetailUseCase,
-    private val getSeriesCreditsUseCase: GetSeriesCreditsUseCase
+    private val getSeriesCreditsUseCase: GetSeriesCreditsUseCase,
+    private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
+    private val getSimilarSeriesUseCase: GetSimilarSeriesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -44,10 +48,13 @@ class DetailViewModel @Inject constructor(
             "movie" -> {
                 getMovieDetail(id)
                 getMovieCredits(id)
+                getSimilarMovies(id)
             }
+
             "series" -> {
                 getSeriesDetail(id)
                 getSeriesCredits(id)
+                getSimilarSeries(id)
             }
         }
     }
@@ -90,6 +97,26 @@ class DetailViewModel @Inject constructor(
             val seriesDetail = getSeriesDetailUseCase(seriesId)
             updateUiState { copy(isLoading = false, series = seriesDetail) }
         } catch (e: Exception) {
+            updateUiState { copy(isLoading = false) }
+        }
+    }
+
+    private fun getSimilarMovies(movieId: Int) = viewModelScope.launch {
+        updateUiState { copy(isLoading = true) }
+        val result = getSimilarMoviesUseCase(movieId)
+        result.onSuccess {
+            updateUiState { copy(isLoading = false, similarMovies = it) }
+        }.onFailure {
+            updateUiState { copy(isLoading = false) }
+        }
+    }
+
+    private fun getSimilarSeries(seriesId: Int) = viewModelScope.launch {
+        updateUiState { copy(isLoading = true) }
+        val result = getSimilarSeriesUseCase(seriesId)
+        result.onSuccess {
+            updateUiState { copy(isLoading = false, similarSeries = it) }
+        }.onFailure {
             updateUiState { copy(isLoading = false) }
         }
     }

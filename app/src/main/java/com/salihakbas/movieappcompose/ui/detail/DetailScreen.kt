@@ -43,8 +43,10 @@ import com.salihakbas.movieappcompose.common.collectWithLifecycle
 import com.salihakbas.movieappcompose.data.model.Cast
 import com.salihakbas.movieappcompose.data.model.Crew
 import com.salihakbas.movieappcompose.data.model.Genre
+import com.salihakbas.movieappcompose.data.model.Movie
 import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
+import com.salihakbas.movieappcompose.data.model.Series
 import com.salihakbas.movieappcompose.data.model.SeriesCast
 import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
 import com.salihakbas.movieappcompose.data.model.SeriesCrew
@@ -65,7 +67,9 @@ fun DetailScreen(
     onAction: (UiAction) -> Unit,
     navigateBack: () -> Unit,
     navigateToTrailer: (Int) -> Unit,
-    navigateToPersonDetail: (Int) -> Unit
+    navigateToPersonDetail: (Int) -> Unit,
+    navigateToMovieDetail: (Int) -> Unit,
+    navigateToSeriesDetail: (Int) -> Unit
 ) {
     uiEffect.collectWithLifecycle {
         when (it) {
@@ -81,12 +85,21 @@ fun DetailScreen(
                 uiState.movieCredit,
                 navigateBack,
                 navigateToTrailer,
-                navigateToPersonDetail
+                navigateToPersonDetail,
+                uiState,
+                navigateToMovieDetail
             )
         }
 
         uiState.series != null -> {
-            SeriesDetailContent(series = uiState.series, uiState.seriesCredit, navigateBack,navigateToPersonDetail)
+            SeriesDetailContent(
+                series = uiState.series,
+                uiState.seriesCredit,
+                navigateBack,
+                navigateToPersonDetail,
+                uiState,
+                navigateToSeriesDetail
+            )
         }
 
         else -> {
@@ -101,7 +114,9 @@ fun MovieDetailContent(
     credits: MovieCreditsResponse?,
     navigateBack: () -> Unit,
     navigateToTrailer: (Int) -> Unit,
-    navigateToPersonDetail: (Int) -> Unit
+    navigateToPersonDetail: (Int) -> Unit,
+    uiState: UiState,
+    navigateToMovieDetail: (Int) -> Unit
 ) {
     val runtimeInMinutes = movie.runtime
     val hours = runtimeInMinutes / 60
@@ -199,6 +214,22 @@ fun MovieDetailContent(
         credits?.cast?.let {
             MovieCreditsSection(it, credits.crew, navigateToPersonDetail)
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Similar Movies",
+            color = Color.White,
+            fontSize = 20.sp,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(uiState.similarMovies) { movie ->
+                SimilarMovieItem(movie, navigateToMovieDetail)
+            }
+        }
+
     }
 }
 
@@ -207,7 +238,9 @@ fun SeriesDetailContent(
     series: TvShowResponse,
     credits: SeriesCreditsResponse?,
     navigateBack: () -> Unit,
-    navigateToPersonDetail: (Int) -> Unit
+    navigateToPersonDetail: (Int) -> Unit,
+    uiState: UiState,
+    navigateToSeriesDetail: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -223,8 +256,7 @@ fun SeriesDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
-                .clip(RoundedCornerShape(12.dp))
-            ,
+                .clip(RoundedCornerShape(12.dp)),
             contentScale = ContentScale.FillBounds
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -287,7 +319,27 @@ fun SeriesDetailContent(
             color = Color.White
         )
         Spacer(modifier = Modifier.height(8.dp))
-        SeriesCreditsSection(credits?.cast ?: emptyList(), credits?.crew ?: emptyList(), navigateToPersonDetail)
+        SeriesCreditsSection(
+            credits?.cast ?: emptyList(),
+            credits?.crew ?: emptyList(),
+            navigateToPersonDetail
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Similar Series",
+            color = Color.White,
+            fontSize = 20.sp,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(uiState.similarSeries) { series ->
+                SimilarSeriesItem(series, navigateToSeriesDetail)
+            }
+        }
     }
 }
 
@@ -396,7 +448,11 @@ fun MovieCreditsSection(
 }
 
 @Composable
-fun SeriesCreditsSection(castList: List<SeriesCast>, crewList: List<SeriesCrew>,navigateToPersonDetail: (Int) -> Unit) {
+fun SeriesCreditsSection(
+    castList: List<SeriesCast>,
+    crewList: List<SeriesCrew>,
+    navigateToPersonDetail: (Int) -> Unit
+) {
     Column {
         Text(
             text = "Cast",
@@ -505,6 +561,40 @@ fun GenreRow(genres: List<Genre>) {
     }
 }
 
+@Composable
+fun SimilarMovieItem(
+    movie: Movie,
+    navigateToMovieDetail: (Int) -> Unit
+) {
+    AsyncImage(
+        model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+        contentDescription = movie.title,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .clickable { navigateToMovieDetail(movie.id) },
+        contentScale = ContentScale.FillBounds
+    )
+}
+
+@Composable
+fun SimilarSeriesItem(
+    series: Series,
+    navigateToSeriesDetail: (Int) -> Unit
+) {
+    AsyncImage(
+        model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
+        contentDescription = series.name,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .clickable { navigateToSeriesDetail(series.id) },
+        contentScale = ContentScale.FillBounds
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DetailScreenPreview(
@@ -516,6 +606,8 @@ fun DetailScreenPreview(
         onAction = {},
         navigateBack = {},
         navigateToTrailer = {},
-        navigateToPersonDetail = {}
+        navigateToPersonDetail = {},
+        navigateToMovieDetail = {},
+        navigateToSeriesDetail = {}
     )
 }
