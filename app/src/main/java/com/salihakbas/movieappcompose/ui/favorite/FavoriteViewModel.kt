@@ -1,6 +1,9 @@
 package com.salihakbas.movieappcompose.ui.favorite
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.salihakbas.movieappcompose.domain.repository.FavoriteRepository
 import com.salihakbas.movieappcompose.ui.favorite.FavoriteContract.UiAction
 import com.salihakbas.movieappcompose.ui.favorite.FavoriteContract.UiEffect
 import com.salihakbas.movieappcompose.ui.favorite.FavoriteContract.UiState
@@ -12,10 +15,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoriteViewModel @Inject constructor() : ViewModel() {
+class FavoriteViewModel @Inject constructor(
+    private val repository: FavoriteRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -23,7 +29,30 @@ class FavoriteViewModel @Inject constructor() : ViewModel() {
     private val _uiEffect by lazy { Channel<UiEffect>() }
     val uiEffect: Flow<UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
+    init {
+        observeFavorites()
+    }
+
     fun onAction(uiAction: UiAction) {
+    }
+
+    private fun observeFavorites() {
+        viewModelScope.launch {
+            repository.getAllFavorites().collect { list ->
+                _uiState.update {
+                    it.copy(
+                        favoriteMovie = list,
+                        isLoading = false
+                    )
+                }
+            }
+        }
+    }
+
+    fun removeFromFavorites(id: Int) {
+        viewModelScope.launch {
+            repository.removeFavorite(id)
+        }
     }
 
     private fun updateUiState(block: UiState.() -> UiState) {
