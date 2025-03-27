@@ -16,3 +16,21 @@ data class Movie(
     val video: Boolean
 )
 
+fun Movie.toFavoriteEntity(): FavoriteEntity {
+    return FavoriteEntity(
+        id = id,
+        title = title,
+        original_title = original_title,
+        overview = overview,
+        poster_path = poster_path,
+        backdrop_path = backdrop_path,
+        release_date = release_date,
+        vote_average = vote_average,
+        vote_count = vote_count,
+        popularity = popularity,
+        genre_ids = genre_ids,
+        adult = adult,
+        video = video
+    )
+}
+

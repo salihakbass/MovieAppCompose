@@ -27,3 +27,21 @@ data class MovieDetailResponse(
     val vote_average: Double = 0.0,
     val vote_count: Int = 0
 )
+
+fun MovieDetailResponse.toFavoriteEntity(): FavoriteEntity {
+    return FavoriteEntity(
+        id = id,
+        title = title,
+        original_title = original_title,
+        overview = overview,
+        poster_path = poster_path,
+        backdrop_path = backdrop_path,
+        release_date = release_date,
+        vote_average = vote_average,
+        vote_count = vote_count,
+        popularity = popularity,
+        genre_ids = genres.map { it.id },
+        adult = adult,
+        video = video
+    )
+}
