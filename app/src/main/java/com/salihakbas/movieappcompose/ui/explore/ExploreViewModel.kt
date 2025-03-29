@@ -1,6 +1,9 @@
 package com.salihakbas.movieappcompose.ui.explore
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.salihakbas.movieappcompose.common.Resource
+import com.salihakbas.movieappcompose.domain.usecase.movie.SearchMoviesUseCase
 import com.salihakbas.movieappcompose.ui.explore.ExploreContract.UiAction
 import com.salihakbas.movieappcompose.ui.explore.ExploreContract.UiEffect
 import com.salihakbas.movieappcompose.ui.explore.ExploreContract.UiState
@@ -12,10 +15,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ExploreViewModel @Inject constructor() : ViewModel() {
+class ExploreViewModel @Inject constructor(
+    private val searchMoviesUseCase: SearchMoviesUseCase
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -24,6 +30,29 @@ class ExploreViewModel @Inject constructor() : ViewModel() {
     val uiEffect: Flow<UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
     fun onAction(uiAction: UiAction) {
+        when (uiAction) {
+            is UiAction.OnQueryChanged -> {
+                updateUiState { copy(query = uiAction.query) }
+                if (uiAction.query.isNotEmpty()) {
+                    searchMovies(uiAction.query)
+                } else {
+                    updateUiState { copy(movies = emptyList()) }
+                }
+            }
+        }
+    }
+
+    private fun searchMovies(query: String) = viewModelScope.launch {
+
+        when (val result = searchMoviesUseCase(query)) {
+            is Resource.Success -> {
+                updateUiState { copy(isLoading = false, movies = result.data) }
+            }
+
+            is Resource.Error -> {
+                updateUiState { copy(isLoading = false) }
+            }
+        }
     }
 
     private fun updateUiState(block: UiState.() -> UiState) {
