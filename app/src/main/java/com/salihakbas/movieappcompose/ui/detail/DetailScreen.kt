@@ -1,6 +1,7 @@
 package com.salihakbas.movieappcompose.ui.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -87,8 +88,7 @@ fun DetailScreen(
                 navigateToTrailer,
                 navigateToPersonDetail,
                 uiState,
-                navigateToMovieDetail,
-                onAction
+                navigateToMovieDetail
             )
         }
 
@@ -99,8 +99,7 @@ fun DetailScreen(
                 navigateBack,
                 navigateToPersonDetail,
                 uiState,
-                navigateToSeriesDetail,
-                onAction
+                navigateToSeriesDetail
             )
         }
 
@@ -118,8 +117,7 @@ fun MovieDetailContent(
     navigateToTrailer: (Int) -> Unit,
     navigateToPersonDetail: (Int) -> Unit,
     uiState: UiState,
-    navigateToMovieDetail: (Int) -> Unit,
-    onAction: (UiAction) -> Unit
+    navigateToMovieDetail: (Int) -> Unit
 ) {
     val runtimeInMinutes = movie.runtime
     val hours = runtimeInMinutes / 60
@@ -132,7 +130,7 @@ fun MovieDetailContent(
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        TopBar(navigateBack, onAction, uiState)
+        TopBar(navigateBack, uiState)
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
             contentDescription = movie.title,
@@ -192,8 +190,6 @@ fun MovieDetailContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 GenreRow(movie.genres)
             }
-
-
         }
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider()
@@ -232,7 +228,6 @@ fun MovieDetailContent(
                 SimilarMovieItem(movie, navigateToMovieDetail)
             }
         }
-
     }
 }
 
@@ -243,8 +238,7 @@ fun SeriesDetailContent(
     navigateBack: () -> Unit,
     navigateToPersonDetail: (Int) -> Unit,
     uiState: UiState,
-    navigateToSeriesDetail: (Int) -> Unit,
-    onAction: (UiAction) -> Unit
+    navigateToSeriesDetail: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -253,7 +247,7 @@ fun SeriesDetailContent(
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        TopBar(navigateBack, onAction, uiState)
+        TopBar(navigateBack, uiState)
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
             contentDescription = series.name,
@@ -350,7 +344,6 @@ fun SeriesDetailContent(
 @Composable
 fun TopBar(
     onClick: () -> Unit,
-    onAction: (UiAction) -> Unit,
     uiState: UiState
 ) {
     Row(
@@ -364,16 +357,8 @@ fun TopBar(
         Icon(
             painter = painterResource(R.drawable.ic_bookmark),
             contentDescription = null,
-            tint = if (uiState.isFavorite) {
-                colorResource(R.color.main_orange)
-            } else {
-                Color.White
-            },
             modifier = Modifier
                 .size(32.dp)
-                .clickable {
-                    onAction(UiAction.ToggleFavorite)
-                }
         )
     }
 }
