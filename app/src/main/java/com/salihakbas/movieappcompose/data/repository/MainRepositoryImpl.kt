@@ -129,5 +129,14 @@ class MainRepositoryImpl @Inject constructor(
         return mainService.getSimilarSeries(seriesId, language, page).results
     }
 
+    override suspend fun getSearchMovies(
+        query: String,
+        language: String,
+        page: Int,
+        includeAdult: Boolean
+    ): List<Movie> {
+        return mainService.getSearchMovies(query, language, page, includeAdult).results
+    }
+
 
 }

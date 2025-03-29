@@ -103,4 +103,11 @@ interface MainRepository {
         page: Int = 1
     ): List<Series>
 
+    suspend fun getSearchMovies(
+        query: String,
+        language: String = "en-US",
+        page: Int = 1,
+        includeAdult: Boolean = false
+    ): List<Movie>
+
 }
