@@ -3,6 +3,7 @@ package com.salihakbas.movieappcompose.ui.explore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.salihakbas.movieappcompose.common.Resource
+import com.salihakbas.movieappcompose.domain.usecase.movie.GetTopRatedMoviesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.SearchMoviesUseCase
 import com.salihakbas.movieappcompose.ui.explore.ExploreContract.UiAction
 import com.salihakbas.movieappcompose.ui.explore.ExploreContract.UiEffect
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
-    private val searchMoviesUseCase: SearchMoviesUseCase
+    private val searchMoviesUseCase: SearchMoviesUseCase,
+    private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -28,6 +30,10 @@ class ExploreViewModel @Inject constructor(
 
     private val _uiEffect by lazy { Channel<UiEffect>() }
     val uiEffect: Flow<UiEffect> by lazy { _uiEffect.receiveAsFlow() }
+
+    init {
+        getSuggestedMovies()
+    }
 
     fun onAction(uiAction: UiAction) {
         when (uiAction) {
@@ -52,6 +58,17 @@ class ExploreViewModel @Inject constructor(
             is Resource.Error -> {
                 updateUiState { copy(isLoading = false) }
             }
+        }
+    }
+
+    private fun getSuggestedMovies() = viewModelScope.launch {
+        updateUiState { copy(isLoading = true) }
+        val result = getTopRatedMoviesUseCase()
+        updateUiState { copy(isLoading = false) }
+        result.onSuccess { movies ->
+            updateUiState { copy(suggestedMovies = movies) }
+        }.onFailure {
+
         }
     }
 

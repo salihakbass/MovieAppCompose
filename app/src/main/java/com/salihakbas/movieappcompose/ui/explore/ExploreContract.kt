@@ -8,6 +8,7 @@ object ExploreContract {
         val list: List<String> = emptyList(),
         val query: String = "",
         val movies: List<Movie> = emptyList(),
+        val suggestedMovies: List<Movie> = emptyList()
     )
 
     sealed class UiAction {
