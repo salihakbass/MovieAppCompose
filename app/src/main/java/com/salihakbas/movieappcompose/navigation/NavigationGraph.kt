@@ -206,7 +206,10 @@ fun NavigationGraph(
             ExploreScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateToDetail = { movieId ->
+                    navController.navigate("detail/movie/$movieId")
+                },
             )
         }
         composable<Search> {
