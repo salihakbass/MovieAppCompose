@@ -69,7 +69,8 @@ fun ProfileScreen(
         uiState.list.isNotEmpty() -> EmptyScreen()
         else -> ProfileContent(
             navigateToSubscribe,
-            navigateToEditProfile
+            navigateToEditProfile,
+            uiState
         )
     }
 }
@@ -77,7 +78,8 @@ fun ProfileScreen(
 @Composable
 fun ProfileContent(
     navigateToSubscribe: () -> Unit,
-    navigateToEditProfile: () -> Unit
+    navigateToEditProfile: () -> Unit,
+    uiState: UiState
 ) {
     Column(
         modifier = Modifier
@@ -102,7 +104,7 @@ fun ProfileContent(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Paulo Gonzalez",
+                    text = uiState.name + uiState.surname,
                     fontSize = 24.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Bold

@@ -236,6 +236,7 @@ fun NavigationGraph(
             val viewModel: ProfileViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
             ProfileScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
@@ -243,6 +244,9 @@ fun NavigationGraph(
                 navigateToSubscribe = { navController.navigate(Subscribe) },
                 navigateToEditProfile = { navController.navigate(Screen.EditProfile) }
             )
+            LaunchedEffect(key1 = userId) {
+                viewModel.fetchUserFromRealtimeDatabase(userId)
+            }
         }
         composable<Subscribe> {
             val viewModel: SubscribeViewModel = hiltViewModel()
