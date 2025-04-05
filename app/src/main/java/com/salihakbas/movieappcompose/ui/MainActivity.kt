@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyappTheme {
                 val navController = rememberNavController()
-                val startDestination = Screen.Home
+                val startDestination = Screen.Splash
 
                 val systemUiController = rememberSystemUiController()
                 val backgroundColor = colorResource(R.color.main_blue_bg)
