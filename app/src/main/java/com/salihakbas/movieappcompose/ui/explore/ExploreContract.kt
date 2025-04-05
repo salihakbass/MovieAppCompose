@@ -13,6 +13,7 @@ object ExploreContract {
 
     sealed class UiAction {
         data class OnQueryChanged(val query: String) : UiAction()
+        data object OnSearch : UiAction()
     }
 
     sealed class UiEffect

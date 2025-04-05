@@ -39,10 +39,14 @@ class ExploreViewModel @Inject constructor(
         when (uiAction) {
             is UiAction.OnQueryChanged -> {
                 updateUiState { copy(query = uiAction.query) }
-                if (uiAction.query.isNotEmpty()) {
-                    searchMovies(uiAction.query)
-                } else {
+                if (uiAction.query.isEmpty()) {
                     updateUiState { copy(movies = emptyList()) }
+                }
+            }
+
+            is UiAction.OnSearch -> {
+                if (uiState.value.query.isNotBlank()) {
+                    searchMovies(uiState.value.query)
                 }
             }
         }
