@@ -2,12 +2,9 @@ package com.salihakbas.movieappcompose.data.source.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.salihakbas.movieappcompose.common.RoomTypeConverters
-import com.salihakbas.movieappcompose.data.model.FavoriteEntity
+import com.salihakbas.movieappcompose.data.model.MainEntity
 
-@Database(entities = [FavoriteEntity::class], version = 1, exportSchema = false)
-@TypeConverters(RoomTypeConverters::class)
+@Database(entities = [MainEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun mainDao(): FavoriteDao
 }
