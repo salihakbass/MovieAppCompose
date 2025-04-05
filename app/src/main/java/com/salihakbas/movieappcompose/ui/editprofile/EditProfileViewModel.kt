@@ -1,6 +1,7 @@
 package com.salihakbas.movieappcompose.ui.editprofile
 
 import androidx.lifecycle.ViewModel
+import com.google.firebase.database.FirebaseDatabase
 import com.salihakbas.movieappcompose.ui.editprofile.EditProfileContract.UiAction
 import com.salihakbas.movieappcompose.ui.editprofile.EditProfileContract.UiEffect
 import com.salihakbas.movieappcompose.ui.editprofile.EditProfileContract.UiState
@@ -24,6 +25,34 @@ class EditProfileViewModel @Inject constructor() : ViewModel() {
     val uiEffect: Flow<UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
     fun onAction(uiAction: UiAction) {
+    }
+
+    fun fetchUserFromRealtimeDatabase(userId: String) {
+        updateUiState { copy(isLoading = true) }
+
+        val database = FirebaseDatabase.getInstance().reference
+        database.child("users").child(userId).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    val name = snapshot.child("name").getValue(String::class.java) ?: ""
+                    val email = snapshot.child("email").getValue(String::class.java) ?: ""
+                    val phoneNumber = snapshot.child("phone").getValue(String::class.java) ?: ""
+
+                    updateUiState {
+                        copy(
+                            isLoading = false,
+                            name = name,
+                            email = email,
+                            phoneNumber = phoneNumber,
+                        )
+                    }
+                } else {
+                    updateUiState { copy(isLoading = false) }
+                }
+            }
+            .addOnFailureListener { e ->
+                updateUiState { copy(isLoading = false) }
+            }
     }
 
     private fun updateUiState(block: UiState.() -> UiState) {
