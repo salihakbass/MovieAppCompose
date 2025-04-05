@@ -358,7 +358,8 @@ fun TopBar(
             painter = painterResource(R.drawable.ic_bookmark),
             contentDescription = null,
             modifier = Modifier
-                .size(32.dp)
+                .size(32.dp),
+            tint = colorResource(R.color.main_orange)
         )
     }
 }
