@@ -8,20 +8,11 @@ object SignUpContract {
         val password: String = "",
         val nameSurname: String = "",
         val phoneNumber: String = "",
-        val errorState: ErrorState? = null,
-    ) {
-        fun checkError(): UiState {
-            return copy(
-                errorState = ErrorState(
-                    nameSurnameError = nameSurname.isEmpty(),
-                    phoneNumberError = phoneNumber.isEmpty(),
-                    emailError = email.isEmpty(),
-                    passwordError = password.isEmpty()
-                )
-            )
-        }
-
-    }
+        val nameSurnameError: String? = null,
+        val emailError: String? = null,
+        val phoneNumberError: String? = null,
+        val passwordError: String? = null
+    )
 
     sealed class UiAction {
         data object SignUpClicked : UiAction()
@@ -29,17 +20,6 @@ object SignUpContract {
         data class OnPhoneNumberChanged(val phoneNumber: String) : UiAction()
         data class OnEmailChanged(val email: String) : UiAction()
         data class OnPasswordChanged(val password: String) : UiAction()
-    }
-
-    data class ErrorState(
-        val nameSurnameError: Boolean = false,
-        val phoneNumberError: Boolean = false,
-        val emailError: Boolean = false,
-        val passwordError: Boolean = false,
-    ) {
-        fun hasError(): Boolean {
-            return nameSurnameError || phoneNumberError || emailError || passwordError
-        }
     }
 
     sealed class UiEffect {

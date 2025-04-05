@@ -27,9 +27,6 @@ class SignUpViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _errorState = MutableStateFlow(SignUpContract.ErrorState())
-    val errorState: StateFlow<SignUpContract.ErrorState> = _errorState.asStateFlow()
-
     private val _uiEffect by lazy { Channel<UiEffect>() }
     val uiEffect: Flow<UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
@@ -44,26 +41,22 @@ class SignUpViewModel @Inject constructor(
     }
 
     private fun signUp() = viewModelScope.launch {
-        updateUiState { checkError() }
+        if (!validateFields()) return@launch
 
-        if (uiState.value.errorState?.hasError() == true) {
-            emitUiEffect(UiEffect.ShowSignUpToast)
-            return@launch
-        }
+        val state = uiState.value
 
         when (val result = authRepository.createUserWithEmailAndPassword(
-            nameSurname = uiState.value.nameSurname,
-            phoneNumber = uiState.value.phoneNumber,
-            email = uiState.value.email,
-            password = uiState.value.password
-
+            nameSurname = state.nameSurname,
+            phoneNumber = state.phoneNumber,
+            email = state.email,
+            password = state.password
         )) {
             is Resource.Success -> {
                 saveUserToRealtimeDatabase(
                     result.data,
-                    uiState.value.nameSurname,
-                    uiState.value.email,
-                    uiState.value.phoneNumber
+                    state.nameSurname,
+                    state.email,
+                    state.phoneNumber
                 )
                 emitUiEffect(UiEffect.NavigateToSignIn)
             }
@@ -91,6 +84,26 @@ class SignUpViewModel @Inject constructor(
             }
             .addOnFailureListener { e ->
             }
+    }
+
+    private fun validateFields(): Boolean {
+        val state = uiState.value
+
+        val nameError = if (state.nameSurname.isBlank()) "Bu alan boş bırakılamaz" else null
+        val emailError = if (state.email.isBlank()) "Bu alan boş bırakılamaz" else null
+        val phoneError = if (state.phoneNumber.isBlank()) "Bu alan boş bırakılamaz" else null
+        val passwordError = if (state.password.isBlank()) "Bu alan boş bırakılamaz" else null
+
+        updateUiState {
+            copy(
+                nameSurnameError = nameError,
+                emailError = emailError,
+                phoneNumberError = phoneError,
+                passwordError = passwordError
+            )
+        }
+
+        return listOf(nameError, emailError, phoneError, passwordError).all { it == null }
     }
 
     private fun updateUiState(block: UiState.() -> UiState) {

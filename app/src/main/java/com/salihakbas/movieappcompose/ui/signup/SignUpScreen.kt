@@ -96,11 +96,21 @@ fun SignUpContent(
                     color = Color.Gray
                 )
             },
+            isError = uiState.nameSurnameError != null,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             shape = RoundedCornerShape(12.dp),
-            textStyle = TextStyle(color = Color.White)
+            textStyle = TextStyle(color = Color.White),
+            supportingText = {
+                uiState.nameSurnameError?.let {
+                    Text(
+                        text = it,
+                        color = Color.Red,
+                        fontSize = 12.sp
+                    )
+                }
+            }
         )
         OutlinedTextField(
             value = uiState.email,
@@ -115,7 +125,13 @@ fun SignUpContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             shape = RoundedCornerShape(12.dp),
-            textStyle = TextStyle(color = Color.White)
+            textStyle = TextStyle(color = Color.White),
+            isError = uiState.emailError != null,
+            supportingText = {
+                uiState.emailError?.let {
+                    Text(text = it, color = Color.Red, fontSize = 12.sp)
+                }
+            }
         )
         OutlinedTextField(
             value = uiState.phoneNumber,
@@ -130,7 +146,13 @@ fun SignUpContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             shape = RoundedCornerShape(12.dp),
-            textStyle = TextStyle(color = Color.White)
+            textStyle = TextStyle(color = Color.White),
+            isError = uiState.phoneNumberError != null,
+            supportingText = {
+                uiState.phoneNumberError?.let {
+                    Text(text = it, color = Color.Red, fontSize = 12.sp)
+                }
+            }
         )
         OutlinedTextField(
             value = uiState.password,
@@ -146,6 +168,12 @@ fun SignUpContent(
                 .padding(horizontal = 16.dp),
             shape = RoundedCornerShape(12.dp),
             textStyle = TextStyle(color = Color.White),
+            isError = uiState.passwordError != null,
+            supportingText = {
+                uiState.passwordError?.let {
+                    Text(text = it, color = Color.Red, fontSize = 12.sp)
+                }
+            },
             trailingIcon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_visibility),
@@ -202,7 +230,7 @@ fun SignUpContent(
         }
         Row {
             Text(
-                text = stringResource(R.string.you_dont_have_an_account_text),
+                text = "You already have an account?",
                 color = Color.Gray
             )
             Text(
