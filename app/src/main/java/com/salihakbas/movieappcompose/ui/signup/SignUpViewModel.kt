@@ -59,7 +59,12 @@ class SignUpViewModel @Inject constructor(
 
         )) {
             is Resource.Success -> {
-                saveUserToRealtimeDatabase(result.data, uiState.value.nameSurname)
+                saveUserToRealtimeDatabase(
+                    result.data,
+                    uiState.value.nameSurname,
+                    uiState.value.email,
+                    uiState.value.phoneNumber
+                )
                 emitUiEffect(UiEffect.NavigateToSignIn)
             }
 
@@ -69,10 +74,17 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun saveUserToRealtimeDatabase(userId: String, name: String) {
+    private fun saveUserToRealtimeDatabase(
+        userId: String,
+        name: String,
+        email: String,
+        phone: String
+    ) {
         val database = FirebaseDatabase.getInstance().reference
         val userMap = mapOf(
-            "name" to name
+            "name" to name,
+            "email" to email,
+            "phone" to phone
         )
         database.child("users").child(userId).setValue(userMap)
             .addOnSuccessListener {
