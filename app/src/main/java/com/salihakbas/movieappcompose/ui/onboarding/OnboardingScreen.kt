@@ -2,6 +2,7 @@ package com.salihakbas.movieappcompose.ui.onboarding
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,16 +48,21 @@ fun OnboardingScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
+    navigateToHome: () -> Unit
 ) {
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
-        else -> OnboardingContent()
+        else -> OnboardingContent(
+            navigateToHome = navigateToHome
+        )
     }
 }
 
 @Composable
-fun OnboardingContent() {
+fun OnboardingContent(
+    navigateToHome : () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -160,7 +166,11 @@ fun OnboardingContent() {
             text = "Skip Now",
             color = colorResource(R.color.main_orange),
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .clickable {
+                    navigateToHome()
+                }
         )
     }
 }
@@ -216,5 +226,6 @@ fun OnboardingScreenPreview(
         uiState = uiState,
         uiEffect = emptyFlow(),
         onAction = {},
+        navigateToHome = {}
     )
 }
