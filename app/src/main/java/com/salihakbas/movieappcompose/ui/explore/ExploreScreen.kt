@@ -1,5 +1,6 @@
 package com.salihakbas.movieappcompose.ui.explore
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -107,59 +108,88 @@ fun ExploreContent(
             )
         }
 
-        if (uiState.movies.isEmpty()) {
-            item {
-                SuggestedMovies(uiState = uiState, navigateToDetail = navigateToDetail)
-            }
-        } else {
-            item {
-                Text(
-                    text = "Your Search Result",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                )
+        when {
+            !uiState.hasSearched -> {
+                item {
+                    SuggestedMovies(uiState = uiState, navigateToDetail = navigateToDetail)
+                }
             }
 
-            item {
-                LazyRow {
-                    items(uiState.movies) { movie ->
-                        AsyncImage(
-                            model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(150.dp)
-                                .padding(8.dp)
-                                .clip(shape = RoundedCornerShape(24.dp))
-                                .clickable {
-                                    navigateToDetail(movie.id)
-                                },
-                            alignment = Alignment.Center,
-                            contentScale = ContentScale.FillBounds
+            uiState.hasSearched && uiState.movies.isEmpty() -> {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 64.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.notfound),
+                            contentDescription = "Not Found",
+                            modifier = Modifier.size(200.dp)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "Sorry, your search was not found",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 }
             }
-            listOf(
-                "You May Like This",
-                "Still Looking? Try These!",
-                "Hidden Gems You Shouldn't Miss",
-                "Trending Now"
-            ).forEach { title ->
+            uiState.movies.isNotEmpty() -> {
+
                 item {
-                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = title,
+                        text = "Your Search Result",
                         color = Color.White,
-                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(start = 8.dp)
+                        fontSize = 20.sp,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
                     )
                 }
+
                 item {
-                    MoviesRow(uiState = uiState, navigateToDetail = navigateToDetail)
+                    LazyRow {
+                        items(uiState.movies) { movie ->
+                            AsyncImage(
+                                model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(150.dp)
+                                    .padding(8.dp)
+                                    .clip(shape = RoundedCornerShape(24.dp))
+                                    .clickable {
+                                        navigateToDetail(movie.id)
+                                    },
+                                alignment = Alignment.Center,
+                                contentScale = ContentScale.FillBounds
+                            )
+                        }
+                    }
+                }
+
+                listOf(
+                    "You May Like This",
+                    "Still Looking? Try These!",
+                    "Hidden Gems You Shouldn't Miss",
+                    "Trending Now"
+                ).forEach { title ->
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = title,
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                    item {
+                        MoviesRow(uiState = uiState, navigateToDetail = navigateToDetail)
+                    }
                 }
             }
         }
