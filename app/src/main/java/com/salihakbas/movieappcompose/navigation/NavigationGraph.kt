@@ -293,11 +293,16 @@ fun NavigationGraph(
             val viewModel: EditProfileViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
             EditProfileScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateBack = { navController.popBackStack() },
             )
+            LaunchedEffect(key1 = userId) {
+                viewModel.fetchUserFromRealtimeDatabase(userId)
+            }
         }
     }
 }
