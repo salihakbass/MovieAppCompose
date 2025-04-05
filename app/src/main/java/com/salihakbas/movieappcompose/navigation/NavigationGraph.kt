@@ -90,7 +90,8 @@ fun NavigationGraph(
             OnboardingScreen(
                 uiState = uiState,
                 uiEffect = uiEffect,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navigateToHome = { navController.navigate(Home) }
             )
         }
         composable<SignIn> {
@@ -242,7 +243,8 @@ fun NavigationGraph(
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
                 navigateToSubscribe = { navController.navigate(Subscribe) },
-                navigateToEditProfile = { navController.navigate(Screen.EditProfile) }
+                navigateToEditProfile = { navController.navigate(Screen.EditProfile) },
+                navigateToSignIn = { navController.navigate(SignIn) },
             )
             LaunchedEffect(key1 = userId) {
                 viewModel.fetchUserFromRealtimeDatabase(userId)
