@@ -1,7 +1,11 @@
 package com.salihakbas.movieappcompose.ui.profile
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
+import com.salihakbas.movieappcompose.common.Resource
+import com.salihakbas.movieappcompose.domain.repository.FirebaseAuthRepository
+import com.salihakbas.movieappcompose.ui.editprofile.EditProfileContract
 import com.salihakbas.movieappcompose.ui.profile.ProfileContract.UiAction
 import com.salihakbas.movieappcompose.ui.profile.ProfileContract.UiEffect
 import com.salihakbas.movieappcompose.ui.profile.ProfileContract.UiState
@@ -13,10 +17,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor() : ViewModel() {
+class ProfileViewModel @Inject constructor(
+    private val authRepository: FirebaseAuthRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -25,6 +32,9 @@ class ProfileViewModel @Inject constructor() : ViewModel() {
     val uiEffect: Flow<UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
     fun onAction(uiAction: UiAction) {
+        when(uiAction) {
+            UiAction.SignOutClicked -> signOut()
+        }
     }
 
     fun fetchUserFromRealtimeDatabase(userId: String) {
@@ -51,6 +61,17 @@ class ProfileViewModel @Inject constructor() : ViewModel() {
             .addOnFailureListener { e ->
                 updateUiState { copy(isLoading = false) }
             }
+    }
+
+    private fun signOut() = viewModelScope.launch {
+        when(val result = authRepository.signOut()) {
+            is Resource.Success -> {
+                emitUiEffect(UiEffect.NavigateToSignIn)
+            }
+            is Resource.Error -> {
+
+            }
+        }
     }
 
     private fun updateUiState(block: UiState.() -> UiState) {

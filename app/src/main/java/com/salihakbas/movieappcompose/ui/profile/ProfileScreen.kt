@@ -51,7 +51,8 @@ fun ProfileScreen(
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
     navigateToSubscribe: () -> Unit,
-    navigateToEditProfile: () -> Unit
+    navigateToEditProfile: () -> Unit,
+    navigateToSignIn: () -> Unit
 ) {
     uiEffect.collectWithLifecycle {
         when (it) {
@@ -62,6 +63,10 @@ fun ProfileScreen(
             UiEffect.NavigateToEditProfile -> {
                 navigateToEditProfile()
             }
+
+            UiEffect.NavigateToSignIn -> {
+                navigateToSignIn()
+            }
         }
     }
     when {
@@ -70,7 +75,8 @@ fun ProfileScreen(
         else -> ProfileContent(
             navigateToSubscribe,
             navigateToEditProfile,
-            uiState
+            uiState,
+            onAction
         )
     }
 }
@@ -79,7 +85,8 @@ fun ProfileScreen(
 fun ProfileContent(
     navigateToSubscribe: () -> Unit,
     navigateToEditProfile: () -> Unit,
-    uiState: UiState
+    uiState: UiState,
+    onAction: (UiAction) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -165,7 +172,7 @@ fun ProfileContent(
         ProfileButtons(
             painter = painterResource(R.drawable.ic_signout),
             text = "Sign Out",
-            navigate = {}
+            navigate = { onAction(UiAction.SignOutClicked) }
         )
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(
@@ -295,6 +302,7 @@ fun ProfileScreenPreview(
         uiEffect = emptyFlow(),
         onAction = {},
         navigateToSubscribe = {},
-        navigateToEditProfile = {}
+        navigateToEditProfile = {},
+        navigateToSignIn = {}
     )
 }
