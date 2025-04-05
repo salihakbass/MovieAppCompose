@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.salihakbas.movieappcompose.R
 import com.salihakbas.movieappcompose.navigation.Screen
 import com.salihakbas.movieappcompose.ui.components.EmptyScreen
@@ -60,6 +61,7 @@ fun SplashScreen(
 fun SplashContent(
     navController: NavController,
 ) {
+    val auth = FirebaseAuth.getInstance()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,7 +76,16 @@ fun SplashContent(
                 delay(100)
                 progress += 0.05f
             }
-            navController.navigate(Screen.getRoute(Screen.Home))
+            val currentUser = auth.currentUser
+            if (currentUser != null) {
+                navController.navigate(Screen.getRoute(Screen.Home)) {
+                    popUpTo(Screen.getRoute(Screen.Splash)) { inclusive = true }
+                }
+            } else {
+                navController.navigate(Screen.getRoute(Screen.SignIn)) {
+                    popUpTo(Screen.getRoute(Screen.Splash)) { inclusive = true }
+                }
+            }
         }
         Text(
             text = stringResource(R.string.movie_text_splash),
