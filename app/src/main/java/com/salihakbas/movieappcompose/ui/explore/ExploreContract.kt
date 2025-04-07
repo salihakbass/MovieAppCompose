@@ -1,6 +1,6 @@
 package com.salihakbas.movieappcompose.ui.explore
 
-import com.salihakbas.movieappcompose.data.model.Movie
+import com.salihakbas.movieappcompose.data.model.movie.Movie
 
 object ExploreContract {
     data class UiState(

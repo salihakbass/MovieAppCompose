@@ -1,4 +1,4 @@
-package com.salihakbas.movieappcompose.data.model
+package com.salihakbas.movieappcompose.data.model.person
 
 import com.google.gson.annotations.SerializedName
 
@@ -8,7 +8,8 @@ data class PersonDetailResponse(
     val alsoKnownAs: List<String>,
     val biography: String,
     val birthday: String?,
-    val deathday: String?,
+    @SerializedName("deathday")
+    val deathDay: String?,
     val gender: Int,
     val homepage: String?,
     val id: Int,

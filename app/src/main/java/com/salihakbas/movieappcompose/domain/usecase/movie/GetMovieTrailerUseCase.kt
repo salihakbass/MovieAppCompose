@@ -1,6 +1,6 @@
 package com.salihakbas.movieappcompose.domain.usecase.movie
 
-import com.salihakbas.movieappcompose.data.model.MovieTrailerResponse
+import com.salihakbas.movieappcompose.data.model.movie.MovieTrailerResponse
 import com.salihakbas.movieappcompose.domain.repository.MainRepository
 import javax.inject.Inject
 

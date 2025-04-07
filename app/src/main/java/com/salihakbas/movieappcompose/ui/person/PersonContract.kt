@@ -1,6 +1,6 @@
 package com.salihakbas.movieappcompose.ui.person
 
-import com.salihakbas.movieappcompose.data.model.PersonDetailResponse
+import com.salihakbas.movieappcompose.data.model.person.PersonDetailResponse
 
 object PersonContract {
     data class UiState(

@@ -155,7 +155,7 @@ fun ExploreContent(
                     LazyRow {
                         items(uiState.movies) { movie ->
                             AsyncImage(
-                                model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                                model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(150.dp)
@@ -208,7 +208,7 @@ fun MoviesRow(
     ) {
         items(shuffledList) { movie ->
             AsyncImage(
-                model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                 contentDescription = null,
                 modifier = Modifier
                     .size(150.dp)
@@ -255,7 +255,7 @@ fun SuggestedMovies(
                         }
                 ) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                        model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                         contentDescription = movie.title,
                         modifier = Modifier
                             .size(width = 100.dp, height = 150.dp)
@@ -295,7 +295,7 @@ fun SuggestedMovies(
                                 modifier = Modifier.size(16.dp)
                             )
                             Text(
-                                text = String.format(Locale.US, "%.1f", movie.vote_average),
+                                text = String.format(Locale.US, "%.1f", movie.voteAverage),
                                 color = Color.White,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold

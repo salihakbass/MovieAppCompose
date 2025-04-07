@@ -1,13 +1,13 @@
 package com.salihakbas.movieappcompose.domain.repository
 
-import com.salihakbas.movieappcompose.data.model.Movie
-import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
-import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
-import com.salihakbas.movieappcompose.data.model.MovieTrailerResponse
-import com.salihakbas.movieappcompose.data.model.PersonDetailResponse
-import com.salihakbas.movieappcompose.data.model.Series
-import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
-import com.salihakbas.movieappcompose.data.model.TvShowResponse
+import com.salihakbas.movieappcompose.data.model.movie.Movie
+import com.salihakbas.movieappcompose.data.model.movie.MovieCreditsResponse
+import com.salihakbas.movieappcompose.data.model.movie.MovieDetailResponse
+import com.salihakbas.movieappcompose.data.model.movie.MovieTrailerResponse
+import com.salihakbas.movieappcompose.data.model.person.PersonDetailResponse
+import com.salihakbas.movieappcompose.data.model.series.Series
+import com.salihakbas.movieappcompose.data.model.series.SeriesCreditsResponse
+import com.salihakbas.movieappcompose.data.model.series.TvShowResponse
 
 interface MainRepository {
     suspend fun getPopularMovies(

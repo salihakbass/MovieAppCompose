@@ -1,4 +1,4 @@
-package com.salihakbas.movieappcompose.data.model
+package com.salihakbas.movieappcompose.data.model.base
 
 open class BaseResponse(
     val status: Int? = null,

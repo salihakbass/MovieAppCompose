@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.salihakbas.movieappcompose.R
 import com.salihakbas.movieappcompose.common.toFormattedDate
-import com.salihakbas.movieappcompose.data.model.PersonDetailResponse
+import com.salihakbas.movieappcompose.data.model.person.PersonDetailResponse
 import com.salihakbas.movieappcompose.ui.components.CircleBackgroundIcon
 import com.salihakbas.movieappcompose.ui.components.LoadingBar
 import kotlinx.coroutines.flow.Flow
@@ -95,10 +95,10 @@ fun PersonDetailContent(person: PersonDetailResponse?, navigateBack: () -> Unit)
             person.birthday?.let {
                 Text("🎂 ${it.toFormattedDate()}", fontSize = 14.sp, color = Color.White)
             }
-            if (!person.deathday.isNullOrEmpty()) {
+            if (!person.deathDay.isNullOrEmpty()) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    "✝ ${person.deathday.toFormattedDate()}",
+                    "✝ ${person.deathDay.toFormattedDate()}",
                     fontSize = 14.sp,
                     color = Color.White
                 )

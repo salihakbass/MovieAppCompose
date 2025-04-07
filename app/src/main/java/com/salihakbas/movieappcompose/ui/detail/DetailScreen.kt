@@ -40,17 +40,17 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.salihakbas.movieappcompose.R
 import com.salihakbas.movieappcompose.common.collectWithLifecycle
-import com.salihakbas.movieappcompose.data.model.Cast
-import com.salihakbas.movieappcompose.data.model.Crew
-import com.salihakbas.movieappcompose.data.model.Genre
-import com.salihakbas.movieappcompose.data.model.Movie
-import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
-import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
-import com.salihakbas.movieappcompose.data.model.Series
-import com.salihakbas.movieappcompose.data.model.SeriesCast
-import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
-import com.salihakbas.movieappcompose.data.model.SeriesCrew
-import com.salihakbas.movieappcompose.data.model.TvShowResponse
+import com.salihakbas.movieappcompose.data.model.movie.Cast
+import com.salihakbas.movieappcompose.data.model.movie.Crew
+import com.salihakbas.movieappcompose.data.model.common.Genre
+import com.salihakbas.movieappcompose.data.model.movie.Movie
+import com.salihakbas.movieappcompose.data.model.movie.MovieCreditsResponse
+import com.salihakbas.movieappcompose.data.model.movie.MovieDetailResponse
+import com.salihakbas.movieappcompose.data.model.series.Series
+import com.salihakbas.movieappcompose.data.model.series.SeriesCast
+import com.salihakbas.movieappcompose.data.model.series.SeriesCreditsResponse
+import com.salihakbas.movieappcompose.data.model.series.SeriesCrew
+import com.salihakbas.movieappcompose.data.model.series.TvShowResponse
 import com.salihakbas.movieappcompose.ui.components.CircleBackgroundIcon
 import com.salihakbas.movieappcompose.ui.components.EmptyScreen
 import com.salihakbas.movieappcompose.ui.components.LoadingBar
@@ -132,7 +132,7 @@ fun MovieDetailContent(
     ) {
         TopBar(navigateBack, uiState)
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+            model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
             contentDescription = movie.title,
             modifier = Modifier
                 .fillMaxWidth()
@@ -152,7 +152,7 @@ fun MovieDetailContent(
                 modifier = Modifier.weight(1f, false)
             )
             Text(
-                text = "(${movie.release_date.substring(0, 4)})",
+                text = "(${movie.releaseDate.substring(0, 4)})",
                 color = Color.White,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
@@ -181,7 +181,7 @@ fun MovieDetailContent(
                         modifier = Modifier.size(28.dp)
                     )
                     Text(
-                        text = String.format(Locale.US, "%.1f", movie.vote_average),
+                        text = String.format(Locale.US, "%.1f", movie.voteAverage),
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
@@ -249,7 +249,7 @@ fun SeriesDetailContent(
     ) {
         TopBar(navigateBack, uiState)
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
+            model = "https://image.tmdb.org/t/p/w500${series.posterPath}",
             contentDescription = series.name,
             modifier = Modifier
                 .fillMaxWidth()
@@ -269,7 +269,7 @@ fun SeriesDetailContent(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "(${series.first_air_date?.substring(0, 4)})",
+                text = "(${series.firstAirDate?.substring(0, 4)})",
                 color = Color.Gray,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
@@ -287,7 +287,7 @@ fun SeriesDetailContent(
                 modifier = Modifier.size(28.dp)
             )
             Text(
-                text = String.format(Locale.US, "%.1f", series.vote_average),
+                text = String.format(Locale.US, "%.1f", series.voteAverage),
                 color = Color.White,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
@@ -387,7 +387,7 @@ fun MovieCreditsSection(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500${cast.profile_path}",
+                        model = "https://image.tmdb.org/t/p/w500${cast.profilePath}",
                         contentDescription = cast.name,
                         modifier = Modifier
                             .size(80.dp)
@@ -425,7 +425,7 @@ fun MovieCreditsSection(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500${crew.profile_path}",
+                        model = "https://image.tmdb.org/t/p/w500${crew.profilePath}",
                         contentDescription = crew.name,
                         modifier = Modifier
                             .size(80.dp)
@@ -472,7 +472,7 @@ fun SeriesCreditsSection(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500${cast.profile_path}",
+                        model = "https://image.tmdb.org/t/p/w500${cast.profilePath}",
                         contentDescription = cast.name,
                         modifier = Modifier
                             .size(80.dp)
@@ -512,7 +512,7 @@ fun SeriesCreditsSection(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500${crew.profile_path}",
+                        model = "https://image.tmdb.org/t/p/w500${crew.profilePath}",
                         contentDescription = crew.name,
                         modifier = Modifier
                             .size(80.dp)
@@ -569,7 +569,7 @@ fun SimilarMovieItem(
     navigateToMovieDetail: (Int) -> Unit
 ) {
     AsyncImage(
-        model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+        model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
         contentDescription = movie.title,
         modifier = Modifier
             .fillMaxWidth()
@@ -586,7 +586,7 @@ fun SimilarSeriesItem(
     navigateToSeriesDetail: (Int) -> Unit
 ) {
     AsyncImage(
-        model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
+        model = "https://image.tmdb.org/t/p/w500${series.posterPath}",
         contentDescription = series.name,
         modifier = Modifier
             .fillMaxWidth()

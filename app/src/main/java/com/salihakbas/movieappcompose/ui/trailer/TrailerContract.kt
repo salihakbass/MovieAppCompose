@@ -1,6 +1,6 @@
 package com.salihakbas.movieappcompose.ui.trailer
 
-import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
+import com.salihakbas.movieappcompose.data.model.movie.MovieDetailResponse
 
 object TrailerContract {
     data class UiState(

@@ -1,6 +1,6 @@
 package com.salihakbas.movieappcompose.domain.usecase.serie
 
-import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
+import com.salihakbas.movieappcompose.data.model.series.SeriesCreditsResponse
 import com.salihakbas.movieappcompose.domain.repository.MainRepository
 import javax.inject.Inject
 

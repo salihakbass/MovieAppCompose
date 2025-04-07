@@ -1,13 +1,13 @@
 package com.salihakbas.movieappcompose.data.source.remote
 
-import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
-import com.salihakbas.movieappcompose.data.model.MovieDetailResponse
-import com.salihakbas.movieappcompose.data.model.MovieResponse
-import com.salihakbas.movieappcompose.data.model.MovieTrailerResponse
-import com.salihakbas.movieappcompose.data.model.PersonDetailResponse
-import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
-import com.salihakbas.movieappcompose.data.model.SeriesResponse
-import com.salihakbas.movieappcompose.data.model.TvShowResponse
+import com.salihakbas.movieappcompose.data.model.movie.MovieCreditsResponse
+import com.salihakbas.movieappcompose.data.model.movie.MovieDetailResponse
+import com.salihakbas.movieappcompose.data.model.movie.MovieResponse
+import com.salihakbas.movieappcompose.data.model.movie.MovieTrailerResponse
+import com.salihakbas.movieappcompose.data.model.person.PersonDetailResponse
+import com.salihakbas.movieappcompose.data.model.series.SeriesCreditsResponse
+import com.salihakbas.movieappcompose.data.model.series.SeriesResponse
+import com.salihakbas.movieappcompose.data.model.series.TvShowResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

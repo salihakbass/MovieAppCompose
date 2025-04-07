@@ -1,7 +1,7 @@
 package com.salihakbas.movieappcompose.ui.home
 
-import com.salihakbas.movieappcompose.data.model.Movie
-import com.salihakbas.movieappcompose.data.model.Series
+import com.salihakbas.movieappcompose.data.model.movie.Movie
+import com.salihakbas.movieappcompose.data.model.series.Series
 
 object HomeContract {
     data class UiState(

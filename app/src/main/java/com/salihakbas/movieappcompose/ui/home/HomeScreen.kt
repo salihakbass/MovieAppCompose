@@ -43,8 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.salihakbas.movieappcompose.R
-import com.salihakbas.movieappcompose.data.model.Movie
-import com.salihakbas.movieappcompose.data.model.Series
+import com.salihakbas.movieappcompose.data.model.movie.Movie
+import com.salihakbas.movieappcompose.data.model.series.Series
 import com.salihakbas.movieappcompose.ui.components.AvatarProfileWithPlaceholder
 import com.salihakbas.movieappcompose.ui.components.DotIndicator
 import com.salihakbas.movieappcompose.ui.components.EmptyScreen
@@ -228,7 +228,7 @@ fun SeriesItem(
             }
     ) {
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
+            model = "https://image.tmdb.org/t/p/w500${series.posterPath}",
             contentDescription = series.name,
             modifier = Modifier
                 .size(170.dp)
@@ -253,12 +253,12 @@ fun SeriesItem(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = String.format(Locale.US, "%.1f", series.vote_average),
+                text = String.format(Locale.US, "%.1f", series.voteAverage),
                 color = Color.White
             )
             Spacer(modifier = Modifier.width(2.dp))
             Text(
-                text = "(${series.vote_count})",
+                text = "(${series.voteCount})",
                 color = Color.White,
                 fontSize = 12.sp
             )
@@ -272,7 +272,7 @@ fun MovieImageItem(
     navigateToDetail: (Int) -> Unit
 ) {
     AsyncImage(
-        model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+        model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
         contentDescription = movie.title,
         modifier = Modifier
             .fillMaxWidth()
@@ -290,7 +290,7 @@ fun SeriesImageItem(
     navigateToSeriesDetail: (Int) -> Unit
 ) {
     AsyncImage(
-        model = "https://image.tmdb.org/t/p/w500${series.poster_path}",
+        model = "https://image.tmdb.org/t/p/w500${series.posterPath}",
         contentDescription = series.name,
         modifier = Modifier
             .fillMaxWidth()
@@ -404,7 +404,7 @@ fun MovieItem(
             }
     ) {
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+            model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
             contentDescription = movie.title,
             modifier = Modifier
                 .size(170.dp)
@@ -429,12 +429,12 @@ fun MovieItem(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = String.format(Locale.US, "%.1f", movie.vote_average),
+                text = String.format(Locale.US, "%.1f", movie.voteAverage),
                 color = Color.White
             )
             Spacer(modifier = Modifier.width(2.dp))
             Text(
-                text = "(${movie.vote_count})",
+                text = "(${movie.voteCount})",
                 color = Color.White,
                 fontSize = 12.sp
             )

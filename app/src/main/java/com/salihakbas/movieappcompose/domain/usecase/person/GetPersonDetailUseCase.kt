@@ -1,6 +1,6 @@
 package com.salihakbas.movieappcompose.domain.usecase.person
 
-import com.salihakbas.movieappcompose.data.model.PersonDetailResponse
+import com.salihakbas.movieappcompose.data.model.person.PersonDetailResponse
 import com.salihakbas.movieappcompose.domain.repository.MainRepository
 import javax.inject.Inject
 
