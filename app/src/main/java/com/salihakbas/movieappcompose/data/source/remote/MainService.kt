@@ -20,7 +20,6 @@ interface MainService {
         @Query("region") region: String? = null
     ): MovieResponse
 
-
     @GET("movie/now_playing")
     suspend fun getNowPlayingMovies(
         @Query("language") language: String = "en-US",

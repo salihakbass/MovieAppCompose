@@ -1,6 +1,5 @@
 package com.salihakbas.movieappcompose.domain.usecase.movie
 
-import com.salihakbas.movieappcompose.common.Resource
 import com.salihakbas.movieappcompose.data.model.MovieCreditsResponse
 import com.salihakbas.movieappcompose.domain.repository.MainRepository
 import javax.inject.Inject

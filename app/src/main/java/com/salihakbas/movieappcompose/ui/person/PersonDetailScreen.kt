@@ -132,7 +132,6 @@ fun PersonDetailContent(person: PersonDetailResponse?, navigateBack: () -> Unit)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         if (person.alsoKnownAs.isNotEmpty()) {
             Spacer(modifier = Modifier.height(24.dp))
             Text(

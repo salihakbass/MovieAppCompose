@@ -121,8 +121,6 @@ fun SplashContent(
             modifier = Modifier.height(10.dp)
         )
     }
-
-
 }
 
 @Preview(showBackground = true)

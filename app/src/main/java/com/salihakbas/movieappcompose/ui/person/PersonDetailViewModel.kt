@@ -36,7 +36,6 @@ class PersonDetailViewModel @Inject constructor(
     }
 
     fun onAction(uiAction: UiAction) {
-
     }
 
     private fun getPersonDetail(personId: Int) = viewModelScope.launch {
@@ -47,7 +46,6 @@ class PersonDetailViewModel @Inject constructor(
         } catch (e: Exception) {
             updateUiState { copy(isLoading = false) }
         }
-
     }
 
     private fun updateUiState(block: UiState.() -> UiState) {

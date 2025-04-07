@@ -45,12 +45,14 @@ class SignUpViewModel @Inject constructor(
 
         val state = uiState.value
 
-        when (val result = authRepository.createUserWithEmailAndPassword(
-            nameSurname = state.nameSurname,
-            phoneNumber = state.phoneNumber,
-            email = state.email,
-            password = state.password
-        )) {
+        when (
+            val result = authRepository.createUserWithEmailAndPassword(
+                nameSurname = state.nameSurname,
+                phoneNumber = state.phoneNumber,
+                email = state.email,
+                password = state.password
+            )
+        ) {
             is Resource.Success -> {
                 saveUserToRealtimeDatabase(
                     result.data,
@@ -62,7 +64,6 @@ class SignUpViewModel @Inject constructor(
             }
 
             is Resource.Error -> {
-
             }
         }
     }

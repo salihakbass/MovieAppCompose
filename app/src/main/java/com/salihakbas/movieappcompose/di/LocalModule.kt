@@ -2,8 +2,8 @@ package com.salihakbas.movieappcompose.di
 
 import android.content.Context
 import androidx.room.Room
-import com.salihakbas.movieappcompose.data.source.local.FavoriteDao
 import com.salihakbas.movieappcompose.data.source.local.AppDatabase
+import com.salihakbas.movieappcompose.data.source.local.FavoriteDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

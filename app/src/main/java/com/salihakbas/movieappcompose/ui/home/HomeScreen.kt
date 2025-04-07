@@ -55,6 +55,7 @@ import com.salihakbas.movieappcompose.ui.home.HomeContract.UiEffect
 import com.salihakbas.movieappcompose.ui.home.HomeContract.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -252,7 +253,7 @@ fun SeriesItem(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = String.format("%.1f", series.vote_average),
+                text = String.format(Locale.US, "%.1f", series.vote_average),
                 color = Color.White
             )
             Spacer(modifier = Modifier.width(2.dp))
@@ -262,7 +263,6 @@ fun SeriesItem(
                 fontSize = 12.sp
             )
         }
-
     }
 }
 
@@ -429,7 +429,7 @@ fun MovieItem(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = String.format("%.1f", movie.vote_average),
+                text = String.format(Locale.US, "%.1f", movie.vote_average),
                 color = Color.White
             )
             Spacer(modifier = Modifier.width(2.dp))
@@ -439,9 +439,7 @@ fun MovieItem(
                 fontSize = 12.sp
             )
         }
-
     }
-
 }
 
 @Composable
@@ -476,7 +474,6 @@ fun TopBarHome(
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

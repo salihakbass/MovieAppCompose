@@ -15,5 +15,4 @@ class GetNowPlayingMoviesUseCase @Inject constructor(
             Result.failure(e)
         }
     }
-
 }

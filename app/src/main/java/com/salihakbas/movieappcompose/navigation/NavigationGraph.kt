@@ -188,7 +188,6 @@ fun NavigationGraph(
                     onBackClick = { navController.popBackStack() }
                 )
             }
-
         }
         composable<Notification> {
             val viewModel: NotificationViewModel = hiltViewModel()

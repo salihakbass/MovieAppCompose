@@ -1,8 +1,6 @@
 package com.salihakbas.movieappcompose.ui.favorite
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.salihakbas.movieappcompose.ui.favorite.FavoriteContract.UiAction
 import com.salihakbas.movieappcompose.ui.favorite.FavoriteContract.UiEffect
 import com.salihakbas.movieappcompose.ui.favorite.FavoriteContract.UiState
@@ -14,12 +12,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoriteViewModel @Inject constructor(
-) : ViewModel() {
+class FavoriteViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import com.salihakbas.movieappcompose.common.Resource
 import com.salihakbas.movieappcompose.domain.repository.FirebaseAuthRepository
-import com.salihakbas.movieappcompose.ui.editprofile.EditProfileContract
 import com.salihakbas.movieappcompose.ui.profile.ProfileContract.UiAction
 import com.salihakbas.movieappcompose.ui.profile.ProfileContract.UiEffect
 import com.salihakbas.movieappcompose.ui.profile.ProfileContract.UiState
@@ -32,7 +31,7 @@ class ProfileViewModel @Inject constructor(
     val uiEffect: Flow<UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
     fun onAction(uiAction: UiAction) {
-        when(uiAction) {
+        when (uiAction) {
             UiAction.SignOutClicked -> signOut()
         }
     }
@@ -64,12 +63,11 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun signOut() = viewModelScope.launch {
-        when(val result = authRepository.signOut()) {
+        when (val result = authRepository.signOut()) {
             is Resource.Success -> {
                 emitUiEffect(UiEffect.NavigateToSignIn)
             }
             is Resource.Error -> {
-
             }
         }
     }

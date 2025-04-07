@@ -2,16 +2,15 @@ package com.salihakbas.movieappcompose.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.Firebase
 import com.google.firebase.database.FirebaseDatabase
-import com.salihakbas.movieappcompose.domain.usecase.serie.GetAiringTodayTvSeriesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetNowPlayingMoviesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.serie.GetOnTheAirSeriesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetPopularMoviesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.serie.GetPopularSeriesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetTopRatedMoviesUseCase
-import com.salihakbas.movieappcompose.domain.usecase.serie.GetTopRatedSeriesUseCase
 import com.salihakbas.movieappcompose.domain.usecase.movie.GetUpcomingMoviesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.serie.GetAiringTodayTvSeriesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.serie.GetOnTheAirSeriesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.serie.GetPopularSeriesUseCase
+import com.salihakbas.movieappcompose.domain.usecase.serie.GetTopRatedSeriesUseCase
 import com.salihakbas.movieappcompose.ui.home.HomeContract.UiAction
 import com.salihakbas.movieappcompose.ui.home.HomeContract.UiEffect
 import com.salihakbas.movieappcompose.ui.home.HomeContract.UiState
@@ -56,7 +55,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onAction(uiAction: UiAction) {
-
     }
 
     private fun getPopularMovies() = viewModelScope.launch {
@@ -66,7 +64,6 @@ class HomeViewModel @Inject constructor(
         result.onSuccess { movies ->
             updateUiState { copy(popularMovieList = movies) }
         }.onFailure {
-
         }
     }
 
@@ -77,7 +74,6 @@ class HomeViewModel @Inject constructor(
         result.onSuccess { movies ->
             updateUiState { copy(nowPlayingMovieList = movies) }
         }.onFailure {
-
         }
     }
 
@@ -88,7 +84,6 @@ class HomeViewModel @Inject constructor(
         result.onSuccess { movies ->
             updateUiState { copy(topRatedMovieList = movies) }
         }.onFailure {
-
         }
     }
 
@@ -99,7 +94,6 @@ class HomeViewModel @Inject constructor(
         result.onSuccess { movies ->
             updateUiState { copy(upcomingMovieList = movies) }
         }.onFailure {
-
         }
     }
 
@@ -110,7 +104,6 @@ class HomeViewModel @Inject constructor(
         result.onSuccess { series ->
             updateUiState { copy(airingTodayTvSeriesList = series) }
         }.onFailure {
-
         }
     }
 
@@ -121,7 +114,6 @@ class HomeViewModel @Inject constructor(
         result.onSuccess { series ->
             updateUiState { copy(onTheAirSeriesList = series) }
         }.onFailure {
-
         }
     }
 
@@ -132,7 +124,6 @@ class HomeViewModel @Inject constructor(
         result.onSuccess { series ->
             updateUiState { copy(popularSeriesList = series) }
         }.onFailure {
-
         }
     }
 
@@ -143,7 +134,6 @@ class HomeViewModel @Inject constructor(
         result.onSuccess { series ->
             updateUiState { copy(topRatedSeriesList = series) }
         }.onFailure {
-
         }
     }
 
@@ -171,7 +161,6 @@ class HomeViewModel @Inject constructor(
                 updateUiState { copy(isLoading = false) }
             }
     }
-
 
     private fun updateUiState(block: UiState.() -> UiState) {
         _uiState.update(block)

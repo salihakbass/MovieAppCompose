@@ -61,7 +61,6 @@ fun SignInScreen(
             is UiEffect.NavigateToSignUp -> navigateToSignUp()
             is UiEffect.NavigateToHome -> navigateToHome()
         }
-
     }
     when {
         uiState.isLoading -> LoadingBar()

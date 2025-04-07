@@ -13,9 +13,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.salihakbas.movieappcompose.R
@@ -56,7 +63,6 @@ fun SignUpScreen(
                 ).show()
             }
         }
-
     }
     when {
         uiState.isLoading -> LoadingBar()
@@ -73,6 +79,7 @@ fun SignUpContent(
     uiState: UiState,
     onAction: (UiAction) -> Unit
 ) {
+    var isVisible by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -174,12 +181,16 @@ fun SignUpContent(
                     Text(text = it, color = Color.Red, fontSize = 12.sp)
                 }
             },
+            visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.ic_visibility),
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
+                IconButton(onClick = { isVisible = !isVisible }) {
+                    Icon(
+                        painter = painterResource(
+                            if (isVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+                        ),
+                        contentDescription = null
+                    )
+                }
             }
         )
         Button(
@@ -234,7 +245,7 @@ fun SignUpContent(
                 color = Color.Gray
             )
             Text(
-                text = stringResource(R.string.sign_up_text),
+                text = stringResource(R.string.sign_in_text),
                 color = colorResource(R.color.main_orange),
                 modifier = Modifier.padding(start = 4.dp)
             )
@@ -242,11 +253,11 @@ fun SignUpContent(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun SignUpScreenPreview(
+// @Preview(showBackground = true)
+// @Composable
+// fun SignUpScreenPreview(
 //    @PreviewParameter(SignUpScreenPreviewProvider::class) uiState: UiState,
-//) {
+// ) {
 //    SignUpScreen(
 //        uiState = uiState,
 //        uiEffect = emptyFlow(),
@@ -254,4 +265,4 @@ fun SignUpContent(
 //        navigateToSignIn = {},
 //        errorState =
 //    )
-//}
+// }

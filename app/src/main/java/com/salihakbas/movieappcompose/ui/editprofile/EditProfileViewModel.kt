@@ -1,10 +1,7 @@
 package com.salihakbas.movieappcompose.ui.editprofile
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
-import com.salihakbas.movieappcompose.common.Resource
-import com.salihakbas.movieappcompose.domain.repository.FirebaseAuthRepository
 import com.salihakbas.movieappcompose.ui.editprofile.EditProfileContract.UiAction
 import com.salihakbas.movieappcompose.ui.editprofile.EditProfileContract.UiEffect
 import com.salihakbas.movieappcompose.ui.editprofile.EditProfileContract.UiState
@@ -16,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

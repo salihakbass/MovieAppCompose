@@ -38,10 +38,12 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun signIn() = viewModelScope.launch {
-        when (val result = authRepository.signInWithEmailAndPassword(
-            email = uiState.value.email,
-            password = uiState.value.password
-        )) {
+        when (
+            val result = authRepository.signInWithEmailAndPassword(
+                email = uiState.value.email,
+                password = uiState.value.password
+            )
+        ) {
             is Resource.Success -> {
                 emitUiEffect(UiEffect.NavigateToHome)
             }

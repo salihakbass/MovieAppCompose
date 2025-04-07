@@ -41,7 +41,6 @@ class TrailerViewModel @Inject constructor(
         }
     }
 
-
     fun onAction(uiAction: UiAction) {
         when (uiAction) {
             is UiAction.LoadTrailer -> getMovieTrailer(uiAction.movieId)

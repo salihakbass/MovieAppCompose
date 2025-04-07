@@ -20,17 +20,13 @@ fun FavoriteScreen(
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
-        else -> FavoriteContent(
-        )
+        else -> FavoriteContent()
     }
 }
 
 @Composable
-fun FavoriteContent(
-) {
-
+fun FavoriteContent() {
 }
-
 
 @Preview(showBackground = true)
 @Composable

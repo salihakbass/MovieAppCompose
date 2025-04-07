@@ -11,13 +11,12 @@ import androidx.compose.ui.platform.LocalContext
 fun LockScreenOrientation(orientation: Int) {
     val context = LocalContext.current
     DisposableEffect(orientation) {
-        val activity = context.findActivity() ?: return@DisposableEffect onDispose {  }
+        val activity = context.findActivity() ?: return@DisposableEffect onDispose { }
         val originalOrientation = activity.requestedOrientation
         activity.requestedOrientation = orientation
         onDispose {
             activity.requestedOrientation = originalOrientation
         }
-
     }
 }
 

@@ -55,7 +55,6 @@ class ExploreViewModel @Inject constructor(
     }
 
     private fun searchMovies(query: String) = viewModelScope.launch {
-
         when (val result = searchMoviesUseCase(query)) {
             is Resource.Success -> {
                 updateUiState { copy(isLoading = false, movies = result.data) }
@@ -74,7 +73,6 @@ class ExploreViewModel @Inject constructor(
         result.onSuccess { movies ->
             updateUiState { copy(suggestedMovies = movies) }
         }.onFailure {
-
         }
     }
 

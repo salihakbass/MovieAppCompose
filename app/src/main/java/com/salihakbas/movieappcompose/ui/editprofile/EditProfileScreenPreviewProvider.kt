@@ -1,7 +1,6 @@
 package com.salihakbas.movieappcompose.ui.editprofile
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.salihakbas.movieappcompose.ui.favorite.FavoriteContract
 
 class EditProfileScreenPreviewProvider : PreviewParameterProvider<EditProfileContract.UiState> {
     override val values: Sequence<EditProfileContract.UiState>

@@ -48,6 +48,7 @@ import com.salihakbas.movieappcompose.ui.explore.ExploreContract.UiEffect
 import com.salihakbas.movieappcompose.ui.explore.ExploreContract.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import java.util.Locale
 
 @Composable
 fun ExploreScreen(
@@ -139,7 +140,6 @@ fun ExploreContent(
                 }
             }
             uiState.movies.isNotEmpty() -> {
-
                 item {
                     Text(
                         text = "Your Search Result",
@@ -295,7 +295,7 @@ fun SuggestedMovies(
                                 modifier = Modifier.size(16.dp)
                             )
                             Text(
-                                text = String.format("%.1f", movie.vote_average),
+                                text = String.format(Locale.US, "%.1f", movie.vote_average),
                                 color = Color.White,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold
@@ -307,7 +307,6 @@ fun SuggestedMovies(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

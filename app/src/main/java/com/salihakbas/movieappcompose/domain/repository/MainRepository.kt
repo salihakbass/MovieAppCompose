@@ -109,5 +109,4 @@ interface MainRepository {
         page: Int = 1,
         includeAdult: Boolean = false
     ): List<Movie>
-
 }

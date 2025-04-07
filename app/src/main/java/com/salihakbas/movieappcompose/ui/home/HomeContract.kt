@@ -15,7 +15,7 @@ object HomeContract {
         val onTheAirSeriesList: List<Series> = emptyList(),
         val popularSeriesList: List<Series> = emptyList(),
         val topRatedSeriesList: List<Series> = emptyList(),
-        val username : String = ""
+        val username: String = ""
     )
 
     sealed class UiAction
@@ -23,6 +23,5 @@ object HomeContract {
     sealed class UiEffect {
         data class NavigateToMovieDetail(val movieId: Int) : UiEffect()
         data class NavigateToSeriesDetail(val seriesId: Int) : UiEffect()
-
     }
 }

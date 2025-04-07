@@ -34,7 +34,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Error")
         }
-
     }
 
     override suspend fun isUserLoggedIn(): Boolean = firebaseAuth.currentUser != null

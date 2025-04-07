@@ -1,7 +1,6 @@
 package com.salihakbas.movieappcompose.ui.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -60,6 +59,7 @@ import com.salihakbas.movieappcompose.ui.detail.DetailContract.UiEffect
 import com.salihakbas.movieappcompose.ui.detail.DetailContract.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import java.util.Locale
 
 @Composable
 fun DetailScreen(
@@ -181,7 +181,7 @@ fun MovieDetailContent(
                         modifier = Modifier.size(28.dp)
                     )
                     Text(
-                        text = String.format("%.1f", movie.vote_average),
+                        text = String.format(Locale.US, "%.1f", movie.vote_average),
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
@@ -287,7 +287,7 @@ fun SeriesDetailContent(
                 modifier = Modifier.size(28.dp)
             )
             Text(
-                text = String.format("%.1f", series.vote_average),
+                text = String.format(Locale.US, "%.1f", series.vote_average),
                 color = Color.White,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold

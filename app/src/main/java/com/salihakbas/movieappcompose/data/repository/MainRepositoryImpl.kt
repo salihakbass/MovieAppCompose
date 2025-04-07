@@ -8,14 +8,12 @@ import com.salihakbas.movieappcompose.data.model.PersonDetailResponse
 import com.salihakbas.movieappcompose.data.model.Series
 import com.salihakbas.movieappcompose.data.model.SeriesCreditsResponse
 import com.salihakbas.movieappcompose.data.model.TvShowResponse
-import com.salihakbas.movieappcompose.data.source.local.FavoriteDao
 import com.salihakbas.movieappcompose.data.source.remote.MainService
 import com.salihakbas.movieappcompose.domain.repository.MainRepository
 import javax.inject.Inject
 
 class MainRepositoryImpl @Inject constructor(
-    private val mainService: MainService,
-    private val mainDao: FavoriteDao,
+    private val mainService: MainService
 ) : MainRepository {
     override suspend fun getPopularMovies(
         language: String,
@@ -137,6 +135,4 @@ class MainRepositoryImpl @Inject constructor(
     ): List<Movie> {
         return mainService.getSearchMovies(query, language, page, includeAdult).results
     }
-
-
 }

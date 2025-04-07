@@ -61,7 +61,7 @@ fun OnboardingScreen(
 
 @Composable
 fun OnboardingContent(
-    navigateToHome : () -> Unit
+    navigateToHome: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -86,7 +86,6 @@ fun OnboardingContent(
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
-
             AnnotatedText(
                 modifier = Modifier
                     .fillMaxWidth()
